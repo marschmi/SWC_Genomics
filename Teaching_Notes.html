@@ -87,7 +87,8 @@ img {
 <li><a href="#a-principle-write-data-for-computers-and-code-for-humans.">A principle: “Write data for computers and code for humans.”</a></li>
 </ul></li>
 <li><a href="#creating-objects">Creating objects</a></li>
-<li><a href="#variables-and-assignment-operators">Variables and Assignment Operators</a></li>
+<li><a href="#objects-and-assignment-operators">Objects and Assignment Operators</a></li>
+<li><a href="#functions-and-their-arguments">Functions and their arguments</a></li>
 </ul></li>
 </ul>
 </div>
@@ -277,8 +278,87 @@ help.search(&quot;mean&quot;)</code></pre>
 </ul>
 <p>To do more interesting things, we now need to learn about <strong>variables and assignment operators. </strong></p>
 </div>
-<div id="variables-and-assignment-operators" class="section level2">
-<h2>Variables and Assignment Operators</h2>
+<div id="objects-and-assignment-operators" class="section level2">
+<h2>Objects and Assignment Operators</h2>
+<p>For instance instead of adding <code>3 + 5</code> we can create objects, which are called <strong>objects</strong> We assign an object with the <code>&lt;-</code> operator, which assigns the value on the right to the object on the left The <code>&lt;-</code> can be read as <strong>“goes into”</strong></p>
+<blockquote>
+<p><strong>Tip:</strong> If you use <code>Alt -</code> (push <code>Alt</code> and then <code>-</code>), you can create the <code>&lt;-</code> in a single keystroke.</p>
+</blockquote>
+<pre class="r"><code># assign 3 to a
+a &lt;- 3
+# assign 5 to b
+b &lt;- 5
+
+# what now is a
+a
+# what now is b
+b
+
+#Add a and b 
+a + b
+
+#Add a and b and create c
+c &lt;- a + b
+
+# what now is c
+c</code></pre>
+<blockquote>
+<p><strong>Tip:</strong> The name of your object is <em>important</em>! It should be meaningful and not too long. The name of an object can never start with a number. The following are unacceptable names for objects:</p>
+</blockquote>
+<blockquote>
+<p>-<code>if</code>, <code>else</code>, <code>for</code>: These represent fundamental functions within R.<br />-<code>c</code>, <code>mean</code>, <code>df</code>, <code>data</code>: These are also functions<br />-You can use <code>_</code> and <code>-</code> but not <code>.</code><br />-Use nouns for objects and verbs for functions that you write.<br />-Keep a consistent style of your coding. Remember, code is for humans! (Hadley Wickham and Google each have published style guides.)</p>
+</blockquote>
+</div>
+<div id="functions-and-their-arguments" class="section level2">
+<h2>Functions and their arguments</h2>
+<p><strong>Functions</strong> are “canned scripts” that automate a task. They:</p>
+<ul>
+<li>Requires one or more <em>arguments</em>, which are the inputs to the function.
+<ul>
+<li>Arguments can be anything, numbers, columns of a data.frame, a whole data file. It differs by the function and can be looked up in the help page.<br /></li>
+<li>Many functions have arguments that have <em>defaults</em>. This is a standard value that the author of the function thought would be “good enough in standard cases”.
+<ul>
+<li>For example, what symbol to use in a plot.<br /></li>
+<li>You can always change the default to what you prefer.</li>
+</ul></li>
+</ul></li>
+<li>Often (but not always) return a <em>value</em><br /></li>
+<li>Executing a function is known as <em>calling</em> a function</li>
+</ul>
+<p>For example, let’s take the function <code>sqrt()</code>:</p>
+<ul>
+<li><strong>Argument/Input:</strong> The input, a number.<br /></li>
+<li><strong>Output/Return value:</strong> The value input number squared.</li>
+</ul>
+<p>Another example, let’s take the function <code>round()</code>:</p>
+<blockquote>
+<p><strong>Exercise:</strong><br />Round Pi: 3.14159<br />1. How many arguments does round have?<br />2. What is the default of round?<br />3. Change the default to a different value. What happens?</p>
+</blockquote>
+<pre class="r"><code># Round pi
+round(3.14159) </code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code># What are the arguments and default of round?
+args(round)  </code></pre>
+<pre><code>## function (x, digits = 0) 
+## NULL</code></pre>
+<pre class="r"><code># Changing the default number of digits to 3
+round(3.14159, digits = 3) </code></pre>
+<pre><code>## [1] 3.142</code></pre>
+<pre class="r"><code>round(3.14159, 3) ## NOT recommended for functions with more than one argument!!  </code></pre>
+<pre><code>## [1] 3.142</code></pre>
+<p>We get 3, that’s because the default is to round to the nearest whole number.</p>
+<blockquote>
+<p><strong>Exercise:</strong><br />Create an object named <code>ecoli_genome_length_mb</code> with a value of 4.6.<br />How many picograms does the genome weigh? (978 Mbp = 1 pg)</p>
+</blockquote>
+<div id="solution" class="section level5">
+<h5>Solution</h5>
+<pre class="r"><code>ecoli_genome_length_mb &lt;- 4.6 # This is for an e-coli genome
+ecoli_genome_length_mb</code></pre>
+<pre><code>## [1] 4.6</code></pre>
+<pre class="r"><code>ecoli_genome_weight_pg &lt;- ecoli_genome_length_mb / 978.0
+ecoli_genome_weight_pg # Ecoli genomes don't weigh very much. </code></pre>
+<pre><code>## [1] 0.004703476</code></pre>
+</div>
 </div>
 </div>
 

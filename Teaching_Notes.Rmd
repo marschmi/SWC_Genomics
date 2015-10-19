@@ -157,7 +157,95 @@ If we forget the `#`, **what happens?**
     
 To do more interesting things, we now need to learn about **variables and assignment operators.  **
 
-## Variables and Assignment Operators  
+## Objects and Assignment Operators  
+For instance instead of adding `3 + 5` we can create objects, which are called **objects**  We assign an object with the `<-` operator, which assigns the value on the right to the object on the left  The `<-` can be read as **"goes into"**    
+
+> **Tip:**  If you use `Alt -` (push `Alt` and then `-`), you can create the `<-` in a single keystroke.  
+
+```{r assign simple variables, eval = FALSE, echo=TRUE}
+# assign 3 to a
+a <- 3
+# assign 5 to b
+b <- 5
+
+# what now is a
+a
+# what now is b
+b
+
+#Add a and b 
+a + b
+
+#Add a and b and create c
+c <- a + b
+
+# what now is c
+c
+```
+
+
+> **Tip:** The name of your object is *important*!  It should be meaningful and not too long.  The name of an object can never start with a number. The following are unacceptable names for objects:  
+
+> -`if`, `else`, `for`: These represent fundamental functions within R.  
+> -`c`, `mean`, `df`, `data`: These are also functions  
+> -You can use `_` and `-` but not `.`  
+> -Use nouns for objects and verbs for functions that you write.  
+> -Keep a consistent style of your coding.  Remember, code is for humans!  (Hadley Wickham and Google each have published style guides.)  
+
+##Functions and their arguments  
+**Functions** are "canned scripts" that automate a task.  They:
+
+- Requires one or more *arguments*, which are the inputs to the function.  
+    + Arguments can be anything, numbers, columns of a data.frame, a whole data file.  It differs by the function and can be looked up in the help page.  
+    + Many functions have arguments that have *defaults*.  This is a standard value that the author of the function thought would be "good enough in standard cases".  
+        + For example, what symbol to use in a plot.  
+        + You can always change the default to what you prefer. 
+- Often (but not always) return a *value*    
+- Executing a function is known as *calling* a function  
+
+For example, let's take the function `sqrt()`:  
+
+- **Argument/Input:** The input, a number.  
+- **Output/Return value:** The value input number squared.  
+
+Another example, let's take the function `round()`:  
+
+> **Exercise:**  
+> Round Pi:  3.14159   
+> 1. How many arguments does round have?  
+> 2. What is the default of round?  
+> 3. Change the default to a different value.  What happens?
+
+```{r round example, eval=TRUE, echo=TRUE}
+# Round pi
+round(3.14159) 
+
+# What are the arguments and default of round?
+args(round)  
+
+# Changing the default number of digits to 3
+round(3.14159, digits = 3) 
+round(3.14159, 3) ## NOT recommended for functions with more than one argument!!  
+```
+We get 3, that's because the default is to round to the nearest whole number.  
+
+> **Exercise:**  
+> Create an object named `ecoli_genome_length_mb` with a value of 4.6.  
+> How many picograms does the genome weigh? (978 Mbp = 1 pg)  
+
+
+#####Solution
+```{r genome length exercise, eval=TRUE, echo=TRUE}
+ecoli_genome_length_mb <- 4.6 # This is for an e-coli genome
+ecoli_genome_length_mb
+ecoli_genome_weight_pg <- ecoli_genome_length_mb / 978.0
+ecoli_genome_weight_pg # Ecoli genomes don't weigh very much. 
+```  
+
+
+
+
+
 
 
 
