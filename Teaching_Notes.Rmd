@@ -121,7 +121,15 @@ sessionInfo()
 
   
 # Introduction to R 
-Lesson Can be found at <a href="http://tracykteal.github.io/R-genomics/01-intro-to-R.html" target="_blank">http://tracykteal.github.io/R-genomics/01-intro-to-R.html</a>   
+Lesson can be found at <a href="http://tracykteal.github.io/R-genomics/01-intro-to-R.html" target="_blank">http://tracykteal.github.io/R-genomics/01-intro-to-R.html</a>   
+
+##Learning Objectives  
+
+- Be familiar with R syntax  
+- Understand the concepts of objects and assignment  
+- Understand the concepts of vector and data types  
+- Get exposed to a few functions
+
 
 ## R Syntax  
 *Open up `Final_Analysis.R` and point out the following:*  
@@ -216,7 +224,7 @@ Another example, let's take the function `round()`:
 > 2. What is the default of round?  
 > 3. Change the default to a different value.  What happens?
 
-```{r round example, eval=TRUE, echo=TRUE}
+```{r round example, eval=FALSE, echo=TRUE}
 # Round pi
 round(3.14159) 
 
@@ -235,7 +243,7 @@ We get 3, that's because the default is to round to the nearest whole number.
 
 
 #####Solution
-```{r genome length exercise, eval=TRUE, echo=TRUE}
+```{r genome length exercise, eval=FALSE, echo=TRUE}
 ecoli_genome_length_mb <- 4.6 # This is for an e-coli genome
 ecoli_genome_length_mb
 ecoli_genome_weight_pg <- ecoli_genome_length_mb / 978.0
@@ -243,7 +251,7 @@ ecoli_genome_weight_pg # Ecoli genomes don't weigh very much.
 ```  
 
 #####Human Genome
-```{r Human genome, eval=TRUE, echo=TRUE}
+```{r Human genome, eval=FALSE, echo=TRUE}
 human_genome_length_mb <- 30000 # This is for an e-coli genome
 human_genome_length_mb
 human_genome_weight_pg <- human_genome_length_mb / 978.0 # To calculate the number of picograms that human genomes weight
@@ -258,7 +266,7 @@ human_genome_weight_pg # Human genomes don't weigh very much.
 - `>` "greater than"  
 - `>=` "greater than or equal to"  
 
-```{r comparing things, eval=TRUE, echo=TRUE}
+```{r comparing things, eval=FALSE, echo=TRUE}
 1 ==1 # is 1 equal to 1?
 1 != 1 # is 1 inequal to 1?   
 1 < 2 # Is 1 less than 2?
@@ -268,11 +276,185 @@ human_genome_weight_pg # Human genomes don't weigh very much.
 > **Exercise:**  
 > Compare the lengths of `ecoli_genome_length_mb`  and `human_genome_length_mb`. 
 
-```{r compare human and ecoli, eval=TRUE, echo=TRUE}
-human_genome_length_mb == ecoli_genome_length_mb # Are the genome lengths equal  
-
+```{r compare human and ecoli, eval=FALSE, echo=TRUE}
+human_genome_length_mb == ecoli_genome_length_mb # Are the genome lengths equal?
+human_genome_length_mb != ecoli_genome_length_mb # Are the genome lengths equal?
+human_genome_length_mb > ecoli_genome_length_mb # Are human genome lengths greater than ecoli genome lengths?
 ```
 
 
+## Vectors and Data Types 
+A **vector** is the most common and basic data structure in R.  It's R's workhorse data type.  A **vector** is a list of values, mainly numbers or characters.  You can:  
 
+- Do math with vectors  
+- Can assign a list of values to a variable  
+
+Let's create a vector of genome lengths:  
+
+```{r genome lengths vector, echo=TRUE, eval=FALSE}
+glengths <- c(4.6, 3000, 50000) # Create a vector of 3 genome lengths
+glengths
+glengths[1] # Return the first value 
+glengths[3] # Return the 3rd value 
+```
+
+A vector can also contain characters:
+```{r species character vector, echo=TRUE, eval=FALSE}
+species <- c("ecoli", "human", "corn")
+species
+species[2] #What's the 2nd value in the species vector?
+```
+
+There are many functions to help us explore the vector: 
+```{r vector exploration, echo=TRUE, eval=FALSE}
+length(glengths) # How many vlaues are in the genome lengths vector?
+length(species) # how many values in the species vector?
+length(glengths) == length(species) # Are they the same length? 
+```
+
+Some math with the vectors:  
+```{r vector math, echo=TRUE, eval=FALSE}
+5 * glengths
+new_lengths <- 2 * glengths # multiply lengths by 2
+new_lengths
+```
+
+This makes it easy to combine or work with data!
+
+What type of data is in our vector? 
+```{r vector type, echo=TRUE, eval=FALSE}
+class(glengths) # What type of data is in glengths?
+class(species)
+str(glengths) # What's the structure of glengths?
+str(species)
+```
+
+> **Tip:** `str()` provides an overview of the object and the elements it contains. It is a really useful function when working with large and complex objects:
+
+```{r add values to vector, echo=TRUE, eval=FALSE}
+lengths <- c(glengths, 90) # adding at the end
+lengths
+lengths <- c(30, glengths) # adding at the beginning
+lengths
+```
+
+
+We just saw 2 of the 6 data types that R uses: `character` and `numeric`. The other 4 are:
+
+- `logical` for TRUE and FALSE (the boolean data type)  
+- `integer` for integer numbers (e.g., 2L, the L indicates to R that it’s an integer)  
+- `complex` to represent complex numbers with real and imaginary parts (e.g., 1+4i) and that’s all we’re going to say about them.  
+- "raw" that we won’t discuss further.  
+
+
+Vectors are one of the many data structures that R uses. Other important ones are lists (list), matrices (matrix), data frames (data.frame) and factors (factor).
+
+> Exercise:  
+> 1. What's the difference between a *data structure* and *data type*?  
+> 2. Discuss the definitions of *vector*, *object*, *function*, *arguments*.
+
+# Starting with Data  
+Lesson can be found at <a href="http://tracykteal.github.io/R-genomics/02-starting-with-data.html" target="_blank">http://tracykteal.github.io/R-genomics/02-starting-with-data.html</a> 
+
+##Learning Objectives  
+
+- Load external data (CSV files) in memory using the survey table (Ecoli_metadata.csv) as an example  
+- Explore the structure and the content of the data in R  
+- Understand what are factors and how to manipulate them
+
+## Looking at Metadata  
+We are studying a population of E. coli (designated Ara-3):  
+
+- Propagated for more than 40,000 generations in a glucose-limited minimal medium.  
+- This medium was supplemented with citrate which E. coli cannot metabolize in the aerobic conditions of the experiment.  
+- Sequencing of the populations at regular time points reveals that spontaneous citrate-using mutants (Cit+) appeared at around **31,000** generations.  
+- This metadata describes information on the Ara-3 clones and the columns represent:  
+
+Column  | Description
+------------- | -------------
+Sample | Clone Name
+generation  | generation when sample frozen
+clade  | based on parsimony tree
+strain  | ancestral strain
+cit  | Citrate-using mutant status
+run  | Sequence read archive sample ID
+genome_size  | size in Mbp (Made up for this lesson)
+
+
+1.  Make sure you are in the correct working directory by typing `getwd()`.  
+2. Create a new directory within this working directory called data.  
+3. Move the downloaded file into this directory.  
+4. Time to load the data into R!  
+
+```{r load data1, eval=TRUE, echo=TRUE}
+getwd() # R's pwd - where are we?!
+# reads the Ecoli_metadata.csv file from the data sub-folder
+metadata <- read.csv('data/Ecoli_metadata.csv') #provides no output 
+```
+
+```{r load data2, eval=FALSE, echo = TRUE}
+metadata # This will provide too much output
+head(metadata) # first 6 rows
+tail(metadata) # last 6 rows 
+View(metadata) # View it!
+```
+
+
+## What is a `data.frame`?
+`data.frame` is the de facto data structure for most tabular data and what we use for statistics and plotting.  It is:  
+
+- A collection of vectors of identical lengths.  
+- Each vector represents a column, and each vector can be of a different data type (e.g., characters, integers, factors).  
+- The `str()` function is useful to inspect the data types of the columns.  
+- Spreadsheets can be imported with the `read.csv()` or the `read.table` functions.  
+- By default, data.frame converts (= coerces) columns that contain characters (i.e., text) into the **factor** data type.  
+    + Depending on what you want to do, you might want to keep these columns as characters.  If so, change `read.csv('data/Ecoli_metadata.csv', stringsAsFactors = FALSE)`
+
+
+## Inspecting `data.frame` objects    
+
+- Size:  
+    + `dim()` - returns a vector with the number of rows in the first element, and the number of columns as the second element (the __dim__ensions of the object)  
+    + `nrow()` - returns the number of rows  
+    + `ncol()` - returns the number of columns  
+- Content:  
+    + `head()` - shows the first 6 rows  
+    + `tail()` - shows the last 6 rows  
+    + `View()` - view the data within RStudio
+- Names:  
+    + `names()` or `colnames()` - returns the column names 
+    + `rownames()` - returns the row names  
+- Summary:  
+    + `str()` - structure of the object and information about the class, length and content of each column  
+    + `summary()` - summary statistics for each column
+
+> **Exercises**  
+> What is the class of the object metadata?  
+> How many rows and how many columns are in this object?  
+> How many citrate+ mutants have been recorded in this population?  
+
+
+##Factors 
+**Factors** are used to represent categorical data.   
+
+- Can be ordered or unordered.  
+- Are an important class for statistical analysis and for plotting.  
+- Are stored as integers, and have labels associated with these unique integers.  
+- While factors look (and often behave) like character vectors, they are actually integers under the hood, and you need to be careful when treating them like strings.  
+- Once created, factors can only contain a pre-defined set values, known as **levels**.   
+    + By default, R always sorts levels in alphabetical order
+
+Let’s now check the __str__ucture of our data.frame in more details with the function `str()`:
+
+```{r structure of metadata, eval=TRUE, echo=TRUE}
+str(metadata)
+```
+
+- Some columns say `Factor w/ 30 levels`, which means that each row has a unique value.   
+- `cit` is a `Factor w/ 3 levels`: `minus`, `plus` and `unknown`.
+
+> **Exercise**  
+> By looking at the str(metadata) output:  
+> 1. What does the `$` operator mean?  
+> 2. What do the integers mean at the end of the description for the columns that are `factors`?
 

@@ -83,12 +83,21 @@ img {
 </ul></li>
 </ul></li>
 <li><a href="#introduction-to-r">Introduction to R</a><ul>
+<li><a href="#learning-objectives-1">Learning Objectives</a></li>
 <li><a href="#r-syntax">R Syntax</a><ul>
 <li><a href="#a-principle-write-data-for-computers-and-code-for-humans.">A principle: “Write data for computers and code for humans.”</a></li>
 </ul></li>
 <li><a href="#creating-objects">Creating objects</a></li>
 <li><a href="#objects-and-assignment-operators">Objects and Assignment Operators</a></li>
 <li><a href="#functions-and-their-arguments">Functions and their arguments</a></li>
+<li><a href="#vectors-and-data-types">Vectors and Data Types</a></li>
+</ul></li>
+<li><a href="#starting-with-data">Starting with Data</a><ul>
+<li><a href="#learning-objectives-2">Learning Objectives</a></li>
+<li><a href="#looking-at-metadata">Looking at Metadata</a></li>
+<li><a href="#what-is-a-data.frame">What is a <code>data.frame</code>?</a></li>
+<li><a href="#inspecting-data.frame-objects">Inspecting <code>data.frame</code> objects</a></li>
+<li><a href="#factors">Factors</a></li>
 </ul></li>
 </ul>
 </div>
@@ -241,7 +250,16 @@ help.search(&quot;mean&quot;)</code></pre>
 </div>
 <div id="introduction-to-r" class="section level1">
 <h1>Introduction to R</h1>
-<p>Lesson Can be found at <a href="http://tracykteal.github.io/R-genomics/01-intro-to-R.html" target="_blank">http://tracykteal.github.io/R-genomics/01-intro-to-R.html</a></p>
+<p>Lesson can be found at <a href="http://tracykteal.github.io/R-genomics/01-intro-to-R.html" target="_blank">http://tracykteal.github.io/R-genomics/01-intro-to-R.html</a></p>
+<div id="learning-objectives-1" class="section level2">
+<h2>Learning Objectives</h2>
+<ul>
+<li>Be familiar with R syntax<br /></li>
+<li>Understand the concepts of objects and assignment<br /></li>
+<li>Understand the concepts of vector and data types<br /></li>
+<li>Get exposed to a few functions</li>
+</ul>
+</div>
 <div id="r-syntax" class="section level2">
 <h2>R Syntax</h2>
 <p><em>Open up <code>Final_Analysis.R</code> and point out the following:</em></p>
@@ -335,17 +353,14 @@ c</code></pre>
 <p><strong>Exercise:</strong><br />Round Pi: 3.14159<br />1. How many arguments does round have?<br />2. What is the default of round?<br />3. Change the default to a different value. What happens?</p>
 </blockquote>
 <pre class="r"><code># Round pi
-round(3.14159) </code></pre>
-<pre><code>## [1] 3</code></pre>
-<pre class="r"><code># What are the arguments and default of round?
-args(round)  </code></pre>
-<pre><code>## function (x, digits = 0) 
-## NULL</code></pre>
-<pre class="r"><code># Changing the default number of digits to 3
-round(3.14159, digits = 3)  #Recommended!</code></pre>
-<pre><code>## [1] 3.142</code></pre>
-<pre class="r"><code>round(3.14159, 3) ## NOT recommended for functions with more than one argument!!  </code></pre>
-<pre><code>## [1] 3.142</code></pre>
+round(3.14159) 
+
+# What are the arguments and default of round?
+args(round)  
+
+# Changing the default number of digits to 3
+round(3.14159, digits = 3)  #Recommended!
+round(3.14159, 3) ## NOT recommended for functions with more than one argument!!  </code></pre>
 <p>We get 3, that’s because the default is to round to the nearest whole number.</p>
 <blockquote>
 <p><strong>Exercise:</strong><br />Create an object named <code>ecoli_genome_length_mb</code> with a value of 4.6.<br />How many picograms does the genome weigh? (978 Mbp = 1 pg)</p>
@@ -353,20 +368,16 @@ round(3.14159, digits = 3)  #Recommended!</code></pre>
 <div id="solution" class="section level5">
 <h5>Solution</h5>
 <pre class="r"><code>ecoli_genome_length_mb &lt;- 4.6 # This is for an e-coli genome
-ecoli_genome_length_mb</code></pre>
-<pre><code>## [1] 4.6</code></pre>
-<pre class="r"><code>ecoli_genome_weight_pg &lt;- ecoli_genome_length_mb / 978.0
+ecoli_genome_length_mb
+ecoli_genome_weight_pg &lt;- ecoli_genome_length_mb / 978.0
 ecoli_genome_weight_pg # Ecoli genomes don't weigh very much. </code></pre>
-<pre><code>## [1] 0.004703476</code></pre>
 </div>
 <div id="human-genome" class="section level5">
 <h5>Human Genome</h5>
 <pre class="r"><code>human_genome_length_mb &lt;- 30000 # This is for an e-coli genome
-human_genome_length_mb</code></pre>
-<pre><code>## [1] 30000</code></pre>
-<pre class="r"><code>human_genome_weight_pg &lt;- human_genome_length_mb / 978.0 # To calculate the number of picograms that human genomes weight
+human_genome_length_mb
+human_genome_weight_pg &lt;- human_genome_length_mb / 978.0 # To calculate the number of picograms that human genomes weight
 human_genome_weight_pg # Human genomes don't weigh very much. </code></pre>
-<pre><code>## [1] 30.67485</code></pre>
 </div>
 <div id="comparing-things" class="section level5">
 <h5>Comparing things</h5>
@@ -378,18 +389,214 @@ human_genome_weight_pg # Human genomes don't weigh very much. </code></pre>
 <li><code>&gt;</code> “greater than”<br /></li>
 <li><code>&gt;=</code> “greater than or equal to”</li>
 </ul>
-<pre class="r"><code>1 ==1 # is 1 equal to 1?</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<pre class="r"><code>1 != 1 # is 1 inequal to 1?   </code></pre>
-<pre><code>## [1] FALSE</code></pre>
-<pre class="r"><code>1 &lt; 2 # Is 1 less than 2?</code></pre>
-<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>1 ==1 # is 1 equal to 1?
+1 != 1 # is 1 inequal to 1?   
+1 &lt; 2 # Is 1 less than 2?</code></pre>
 <blockquote>
 <p><strong>Exercise:</strong><br />Compare the lengths of <code>ecoli_genome_length_mb</code> and <code>human_genome_length_mb</code>.</p>
 </blockquote>
-<pre class="r"><code>human_genome_length_mb == ecoli_genome_length_mb # Are the genome lengths equal  </code></pre>
-<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>human_genome_length_mb == ecoli_genome_length_mb # Are the genome lengths equal?
+human_genome_length_mb != ecoli_genome_length_mb # Are the genome lengths equal?
+human_genome_length_mb &gt; ecoli_genome_length_mb # Are human genome lengths greater than ecoli genome lengths?</code></pre>
 </div>
+</div>
+<div id="vectors-and-data-types" class="section level2">
+<h2>Vectors and Data Types</h2>
+<p>A <strong>vector</strong> is the most common and basic data structure in R. It’s R’s workhorse data type. A <strong>vector</strong> is a list of values, mainly numbers or characters. You can:</p>
+<ul>
+<li>Do math with vectors<br /></li>
+<li>Can assign a list of values to a variable</li>
+</ul>
+<p>Let’s create a vector of genome lengths:</p>
+<pre class="r"><code>glengths &lt;- c(4.6, 3000, 50000) # Create a vector of 3 genome lengths
+glengths
+glengths[1] # Return the first value 
+glengths[3] # Return the 3rd value </code></pre>
+<p>A vector can also contain characters:</p>
+<pre class="r"><code>species &lt;- c(&quot;ecoli&quot;, &quot;human&quot;, &quot;corn&quot;)
+species
+species[2] #What's the 2nd value in the species vector?</code></pre>
+<p>There are many functions to help us explore the vector:</p>
+<pre class="r"><code>length(glengths) # How many vlaues are in the genome lengths vector?
+length(species) # how many values in the species vector?
+length(glengths) == length(species) # Are they the same length? </code></pre>
+<p>Some math with the vectors:</p>
+<pre class="r"><code>5 * glengths
+new_lengths &lt;- 2 * glengths # multiply lengths by 2
+new_lengths</code></pre>
+<p>This makes it easy to combine or work with data!</p>
+<p>What type of data is in our vector?</p>
+<pre class="r"><code>class(glengths) # What type of data is in glengths?
+class(species)
+str(glengths) # What's the structure of glengths?
+str(species)</code></pre>
+<blockquote>
+<p><strong>Tip:</strong> <code>str()</code> provides an overview of the object and the elements it contains. It is a really useful function when working with large and complex objects:</p>
+</blockquote>
+<pre class="r"><code>lengths &lt;- c(glengths, 90) # adding at the end
+lengths
+lengths &lt;- c(30, glengths) # adding at the beginning
+lengths</code></pre>
+<p>We just saw 2 of the 6 data types that R uses: <code>character</code> and <code>numeric</code>. The other 4 are:</p>
+<ul>
+<li><code>logical</code> for TRUE and FALSE (the boolean data type)<br /></li>
+<li><code>integer</code> for integer numbers (e.g., 2L, the L indicates to R that it’s an integer)<br /></li>
+<li><code>complex</code> to represent complex numbers with real and imaginary parts (e.g., 1+4i) and that’s all we’re going to say about them.<br /></li>
+<li>“raw” that we won’t discuss further.</li>
+</ul>
+<p>Vectors are one of the many data structures that R uses. Other important ones are lists (list), matrices (matrix), data frames (data.frame) and factors (factor).</p>
+<blockquote>
+<p>Exercise:<br />1. What’s the difference between a <em>data structure</em> and <em>data type</em>?<br />2. Discuss the definitions of <em>vector</em>, <em>object</em>, <em>function</em>, <em>arguments</em>.</p>
+</blockquote>
+</div>
+</div>
+<div id="starting-with-data" class="section level1">
+<h1>Starting with Data</h1>
+<p>Lesson can be found at <a href="http://tracykteal.github.io/R-genomics/02-starting-with-data.html" target="_blank">http://tracykteal.github.io/R-genomics/02-starting-with-data.html</a></p>
+<div id="learning-objectives-2" class="section level2">
+<h2>Learning Objectives</h2>
+<ul>
+<li>Load external data (CSV files) in memory using the survey table (Ecoli_metadata.csv) as an example<br /></li>
+<li>Explore the structure and the content of the data in R<br /></li>
+<li>Understand what are factors and how to manipulate them</li>
+</ul>
+</div>
+<div id="looking-at-metadata" class="section level2">
+<h2>Looking at Metadata</h2>
+<p>We are studying a population of E. coli (designated Ara-3):</p>
+<ul>
+<li>Propagated for more than 40,000 generations in a glucose-limited minimal medium.<br /></li>
+<li>This medium was supplemented with citrate which E. coli cannot metabolize in the aerobic conditions of the experiment.<br /></li>
+<li>Sequencing of the populations at regular time points reveals that spontaneous citrate-using mutants (Cit+) appeared at around <strong>31,000</strong> generations.<br /></li>
+<li>This metadata describes information on the Ara-3 clones and the columns represent:</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Column</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Sample</td>
+<td align="left">Clone Name</td>
+</tr>
+<tr class="even">
+<td align="left">generation</td>
+<td align="left">generation when sample frozen</td>
+</tr>
+<tr class="odd">
+<td align="left">clade</td>
+<td align="left">based on parsimony tree</td>
+</tr>
+<tr class="even">
+<td align="left">strain</td>
+<td align="left">ancestral strain</td>
+</tr>
+<tr class="odd">
+<td align="left">cit</td>
+<td align="left">Citrate-using mutant status</td>
+</tr>
+<tr class="even">
+<td align="left">run</td>
+<td align="left">Sequence read archive sample ID</td>
+</tr>
+<tr class="odd">
+<td align="left">genome_size</td>
+<td align="left">size in Mbp (Made up for this lesson)</td>
+</tr>
+</tbody>
+</table>
+<ol style="list-style-type: decimal">
+<li>Make sure you are in the correct working directory by typing <code>getwd()</code>.<br /></li>
+<li>Create a new directory within this working directory called data.<br /></li>
+<li>Move the downloaded file into this directory.<br /></li>
+<li>Time to load the data into R!</li>
+</ol>
+<pre class="r"><code>getwd() # R's pwd - where are we?!</code></pre>
+<pre><code>## [1] &quot;/Users/marschmi/SWC_Genomics&quot;</code></pre>
+<pre class="r"><code># reads the Ecoli_metadata.csv file from the data sub-folder
+metadata &lt;- read.csv('data/Ecoli_metadata.csv') #provides no output </code></pre>
+<pre class="r"><code>metadata # This will provide too much output
+head(metadata) # first 6 rows
+tail(metadata) # last 6 rows 
+View(metadata) # View it!</code></pre>
+</div>
+<div id="what-is-a-data.frame" class="section level2">
+<h2>What is a <code>data.frame</code>?</h2>
+<p><code>data.frame</code> is the de facto data structure for most tabular data and what we use for statistics and plotting. It is:</p>
+<ul>
+<li>A collection of vectors of identical lengths.<br /></li>
+<li>Each vector represents a column, and each vector can be of a different data type (e.g., characters, integers, factors).<br /></li>
+<li>The <code>str()</code> function is useful to inspect the data types of the columns.<br /></li>
+<li>Spreadsheets can be imported with the <code>read.csv()</code> or the <code>read.table</code> functions.<br /></li>
+<li>By default, data.frame converts (= coerces) columns that contain characters (i.e., text) into the <strong>factor</strong> data type.
+<ul>
+<li>Depending on what you want to do, you might want to keep these columns as characters. If so, change <code>read.csv('data/Ecoli_metadata.csv', stringsAsFactors = FALSE)</code></li>
+</ul></li>
+</ul>
+</div>
+<div id="inspecting-data.frame-objects" class="section level2">
+<h2>Inspecting <code>data.frame</code> objects</h2>
+<ul>
+<li>Size:
+<ul>
+<li><code>dim()</code> - returns a vector with the number of rows in the first element, and the number of columns as the second element (the __dim__ensions of the object)<br /></li>
+<li><code>nrow()</code> - returns the number of rows<br /></li>
+<li><code>ncol()</code> - returns the number of columns<br /></li>
+</ul></li>
+<li>Content:
+<ul>
+<li><code>head()</code> - shows the first 6 rows<br /></li>
+<li><code>tail()</code> - shows the last 6 rows<br /></li>
+<li><code>View()</code> - view the data within RStudio</li>
+</ul></li>
+<li>Names:
+<ul>
+<li><code>names()</code> or <code>colnames()</code> - returns the column names</li>
+<li><code>rownames()</code> - returns the row names<br /></li>
+</ul></li>
+<li>Summary:
+<ul>
+<li><code>str()</code> - structure of the object and information about the class, length and content of each column<br /></li>
+<li><code>summary()</code> - summary statistics for each column</li>
+</ul></li>
+</ul>
+<blockquote>
+<p><strong>Exercises</strong><br />What is the class of the object metadata?<br />How many rows and how many columns are in this object?<br />How many citrate+ mutants have been recorded in this population?</p>
+</blockquote>
+</div>
+<div id="factors" class="section level2">
+<h2>Factors</h2>
+<p><strong>Factors</strong> are used to represent categorical data.</p>
+<ul>
+<li>Can be ordered or unordered.<br /></li>
+<li>Are an important class for statistical analysis and for plotting.<br /></li>
+<li>Are stored as integers, and have labels associated with these unique integers.<br /></li>
+<li>While factors look (and often behave) like character vectors, they are actually integers under the hood, and you need to be careful when treating them like strings.<br /></li>
+<li>Once created, factors can only contain a pre-defined set values, known as <strong>levels</strong>.
+<ul>
+<li>By default, R always sorts levels in alphabetical order</li>
+</ul></li>
+</ul>
+<p>Let’s now check the __str__ucture of our data.frame in more details with the function <code>str()</code>:</p>
+<pre class="r"><code>str(metadata)</code></pre>
+<pre><code>## 'data.frame':    30 obs. of  7 variables:
+##  $ sample     : Factor w/ 30 levels &quot;CZB152&quot;,&quot;CZB154&quot;,..: 7 6 18 19 20 21 22 23 24 25 ...
+##  $ generation : int  0 2000 5000 10000 15000 20000 20000 20000 25000 25000 ...
+##  $ clade      : Factor w/ 7 levels &quot;(C1,C2)&quot;,&quot;C1&quot;,..: NA 7 7 6 6 1 1 1 2 4 ...
+##  $ strain     : Factor w/ 1 level &quot;REL606&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ cit        : Factor w/ 3 levels &quot;minus&quot;,&quot;plus&quot;,..: 3 3 3 3 3 3 3 3 3 3 ...
+##  $ run        : Factor w/ 30 levels &quot;&quot;,&quot;SRR097977&quot;,..: 1 5 22 23 24 25 26 27 28 29 ...
+##  $ genome_size: num  4.62 4.63 4.6 4.59 4.66 4.63 4.62 4.61 4.65 4.59 ...</code></pre>
+<ul>
+<li>Some columns say <code>Factor w/ 30 levels</code>, which means that each row has a unique value.<br /></li>
+<li><code>cit</code> is a <code>Factor w/ 3 levels</code>: <code>minus</code>, <code>plus</code> and <code>unknown</code>.</li>
+</ul>
+<blockquote>
+<p><strong>Exercise</strong><br />By looking at the str(metadata) output:<br />1. What does the <code>$</code> operator mean?<br />2. What do the integers mean at the end of the description for the columns that are <code>factors</code>?</p>
+</blockquote>
 </div>
 </div>
 
