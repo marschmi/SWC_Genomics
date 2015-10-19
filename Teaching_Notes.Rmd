@@ -39,4 +39,101 @@ Other people can easily and exactly replicate our workflow and results
 5. Create a New R Script called `Ecoli_Metagenomes.R` (`File` -> `New File` -> `R Script`) and save it within Your working directory.  
 6.  Does everyone's working directory look like this?  
 
-##  Interacting with R 
+##  Interacting with R  
+Two Main ways with Interacting with R:  
+
+1. Using the Console - this is not recommended.  
+    + Bottom left panel  
+    + Will show commands run and results  
+    + Can type commands directly into the console.  **However, they will not be saved when you close the session!**
+2.  Using Script Files (Plain text files that contain code).  This is recommended.  
+    + Type the code/commands into a script file, send it to the console to check it, and then save the script file.  
+  
+    
+`">"` means that R is ready to receive commands.  You can send code from a script file to the console in 2 ways.  
+
+1. Click the `Run` button in the top right of the script file.  
+2. Highlight the desired code and click `Ctrl-Enter`.  
+  
+A stop sign might show up for longer code.  This shows that R is working to execute the code.  
+  
+`"+"` means that R is waiting for you to complete the code.  R has not yet run the code.  Usually this is because you forgot to'close' a parenthesis or quotation.  Press `Esc` to get out of trouble.  
+
+## Basics of R  
+R is a versatile, open source programming/scripting language that's useful for data analysis/science.  It is:  
+
+- Based on the language S  
+- Open Source Software under GPL (a specific type of license).  
+- Superior to most alternatives  
+- Has over 7,000 contributed packages  
+    + Widely used in academia and industry  
+- Available on all platforms  
+- Not just for statistics, but also for general purpose programming  
+- Large and growing community of peers  
+
+## Organizing Your Working Directory  
+You should always separate the original, raw data from intermediate datasets you create!  For example your working directory might have folders such as:  
+
+- `raw_data`  
+- `intermediate_data`
+- `figures`  
+- `original_analyses`  
+- and so on...  
+
+## Three ways to Seek Help  
+
+1.  You know what function you would like to use but need details about it.  You can type a single question mark:    
+```{r help with a function, eval=FALSE, echo=TRUE}
+?mean  # Reminding myself of the detail and structure of calling the mean function. 
+```
+2.  You cannot remember the function that you need to use, but you remember that it has to deal with calculating means.  To search all functions within your R, you can use a double question mark.  This can also help you remind yourself of which package the function is in.    
+```{r help search, eval=FALSE, echo=TRUE}
+## First way 
+??mean  # Searching for a function that has to do with calculting means of some sort. 
+## Second way 
+help.search("mean")
+```
+Another way to do this is to 
+
+3. If you need to remind yourself of the names of the arguments:  
+```{r arguments, eval=FALSE, echo=TRUE}
+args(hist) # "hist" is a function that makes a histogram.
+```
+Another way is to hit tab.  
+
+### You Get an error message that you don't understand. 
+
+Google it!  Be sure to use key words like **R** and **Error**.  You can copy and paste the error into it.  
+
+### Asking For Help  
+- Be sure to make it possible for someone to grasp your problem rapidly.  Make it easy to pinpoint the problem.  
+- Try to reproduce the problem with different very simplified data.  You can create a simplified data set by using `dput()`.  
+
+```{r asking for help, eval = TRUE, echo = TRUE}
+dput(head(iris)) #Iris is an example data.frame that comes with R.  Head only shows the first 6 rows.  
+```
+- Always include `sessionInfo()` so people can replicate your example.  
+
+```{r SessionInfo, eval=TRUE, echo=TRUE}
+sessionInfo()
+```
+
+
+  
+# Introduction to R 
+Lesson Can be found at <a href="http://tracykteal.github.io/R-genomics/01-intro-to-R.html" target="_blank">http://tracykteal.github.io/R-genomics/01-intro-to-R.html</a>   
+
+## R Syntax  
+*Open up `Final_Analysis.R` and point out the following:*  
+
+- The assignment operator `<-`  
+- The `=` for arguments within functions.  
+- `#` for comments  
+    + This is where you can tell your reader important "behind the scenes" information.
+- The `$` operator for working with columns inside of a data frame.  
+- Indentation and spacing for easy reading - **Code is made for humans**.  
+
+### A principle:  "Write data for computers and code for humans."  
+
+## Creating objects  
+

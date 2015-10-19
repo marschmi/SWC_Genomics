@@ -75,6 +75,18 @@ img {
 <li><a href="#our-goal">Our Goal</a></li>
 <li><a href="#getting-started-with-our-working-directory">Getting Started with Our Working Directory</a></li>
 <li><a href="#interacting-with-r">Interacting with R</a></li>
+<li><a href="#basics-of-r">Basics of R</a></li>
+<li><a href="#organizing-your-working-directory">Organizing Your Working Directory</a></li>
+<li><a href="#three-ways-to-seek-help">Three ways to Seek Help</a><ul>
+<li><a href="#you-get-an-error-message-that-you-dont-understand.">You Get an error message that you don’t understand.</a></li>
+<li><a href="#asking-for-help">Asking For Help</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#introduction-to-r">Introduction to R</a><ul>
+<li><a href="#r-syntax">R Syntax</a><ul>
+<li><a href="#a-principle-write-data-for-computers-and-code-for-humans.">A principle: “Write data for computers and code for humans.”</a></li>
+</ul></li>
+<li><a href="#creating-objects">Creating objects</a></li>
 </ul></li>
 </ul>
 </div>
@@ -119,6 +131,134 @@ img {
 </div>
 <div id="interacting-with-r" class="section level2">
 <h2>Interacting with R</h2>
+<p>Two Main ways with Interacting with R:</p>
+<ol style="list-style-type: decimal">
+<li>Using the Console - this is not recommended.
+<ul>
+<li>Bottom left panel<br /></li>
+<li>Will show commands run and results<br /></li>
+<li>Can type commands directly into the console. <strong>However, they will not be saved when you close the session!</strong></li>
+</ul></li>
+<li>Using Script Files (Plain text files that contain code). This is recommended.
+<ul>
+<li>Type the code/commands into a script file, send it to the console to check it, and then save the script file.</li>
+</ul></li>
+</ol>
+<p><code>&quot;&gt;&quot;</code> means that R is ready to receive commands. You can send code from a script file to the console in 2 ways.</p>
+<ol style="list-style-type: decimal">
+<li>Click the <code>Run</code> button in the top right of the script file.<br /></li>
+<li>Highlight the desired code and click <code>Ctrl-Enter</code>.</li>
+</ol>
+<p>A stop sign might show up for longer code. This shows that R is working to execute the code.</p>
+<p><code>&quot;+&quot;</code> means that R is waiting for you to complete the code. R has not yet run the code. Usually this is because you forgot to’close’ a parenthesis or quotation. Press <code>Esc</code> to get out of trouble.</p>
+</div>
+<div id="basics-of-r" class="section level2">
+<h2>Basics of R</h2>
+<p>R is a versatile, open source programming/scripting language that’s useful for data analysis/science. It is:</p>
+<ul>
+<li>Based on the language S<br /></li>
+<li>Open Source Software under GPL (a specific type of license).<br /></li>
+<li>Superior to most alternatives<br /></li>
+<li>Has over 7,000 contributed packages
+<ul>
+<li>Widely used in academia and industry<br /></li>
+</ul></li>
+<li>Available on all platforms<br /></li>
+<li>Not just for statistics, but also for general purpose programming<br /></li>
+<li>Large and growing community of peers</li>
+</ul>
+</div>
+<div id="organizing-your-working-directory" class="section level2">
+<h2>Organizing Your Working Directory</h2>
+<p>You should always separate the original, raw data from intermediate datasets you create! For example your working directory might have folders such as:</p>
+<ul>
+<li><code>raw_data</code><br /></li>
+<li><code>intermediate_data</code></li>
+<li><code>figures</code><br /></li>
+<li><code>original_analyses</code><br /></li>
+<li>and so on…</li>
+</ul>
+</div>
+<div id="three-ways-to-seek-help" class="section level2">
+<h2>Three ways to Seek Help</h2>
+<ol style="list-style-type: decimal">
+<li>You know what function you would like to use but need details about it. You can type a single question mark:</li>
+</ol>
+<pre class="r"><code>?mean  # Reminding myself of the detail and structure of calling the mean function. </code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>You cannot remember the function that you need to use, but you remember that it has to deal with calculating means. To search all functions within your R, you can use a double question mark. This can also help you remind yourself of which package the function is in.</li>
+</ol>
+<pre class="r"><code>## First way 
+??mean  # Searching for a function that has to do with calculting means of some sort. 
+## Second way 
+help.search(&quot;mean&quot;)</code></pre>
+<p>Another way to do this is to</p>
+<ol start="3" style="list-style-type: decimal">
+<li>If you need to remind yourself of the names of the arguments:</li>
+</ol>
+<pre class="r"><code>args(hist) # &quot;hist&quot; is a function that makes a histogram.</code></pre>
+<p>Another way is to hit tab.</p>
+<div id="you-get-an-error-message-that-you-dont-understand." class="section level3">
+<h3>You Get an error message that you don’t understand.</h3>
+<p>Google it! Be sure to use key words like <strong>R</strong> and <strong>Error</strong>. You can copy and paste the error into it.</p>
+</div>
+<div id="asking-for-help" class="section level3">
+<h3>Asking For Help</h3>
+<ul>
+<li>Be sure to make it possible for someone to grasp your problem rapidly. Make it easy to pinpoint the problem.<br /></li>
+<li>Try to reproduce the problem with different very simplified data. You can create a simplified data set by using <code>dput()</code>.</li>
+</ul>
+<pre class="r"><code>dput(head(iris)) #Iris is an example data.frame that comes with R.  Head only shows the first 6 rows.  </code></pre>
+<pre><code>## structure(list(Sepal.Length = c(5.1, 4.9, 4.7, 4.6, 5, 5.4), 
+##     Sepal.Width = c(3.5, 3, 3.2, 3.1, 3.6, 3.9), Petal.Length = c(1.4, 
+##     1.4, 1.3, 1.5, 1.4, 1.7), Petal.Width = c(0.2, 0.2, 0.2, 
+##     0.2, 0.2, 0.4), Species = structure(c(1L, 1L, 1L, 1L, 1L, 
+##     1L), .Label = c(&quot;setosa&quot;, &quot;versicolor&quot;, &quot;virginica&quot;), class = &quot;factor&quot;)), .Names = c(&quot;Sepal.Length&quot;, 
+## &quot;Sepal.Width&quot;, &quot;Petal.Length&quot;, &quot;Petal.Width&quot;, &quot;Species&quot;), row.names = c(NA, 
+## 6L), class = &quot;data.frame&quot;)</code></pre>
+<ul>
+<li>Always include <code>sessionInfo()</code> so people can replicate your example.</li>
+</ul>
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>## R version 3.2.2 (2015-08-14)
+## Platform: x86_64-apple-darwin13.4.0 (64-bit)
+## Running under: OS X 10.9.5 (Mavericks)
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## loaded via a namespace (and not attached):
+##  [1] magrittr_1.5    formatR_1.2     tools_3.2.2     htmltools_0.2.6
+##  [5] yaml_2.1.13     stringi_0.5-5   rmarkdown_0.8.1 knitr_1.11     
+##  [9] stringr_1.0.0   digest_0.6.8    evaluate_0.7.2</code></pre>
+</div>
+</div>
+</div>
+<div id="introduction-to-r" class="section level1">
+<h1>Introduction to R</h1>
+<p>Lesson Can be found at <a href="http://tracykteal.github.io/R-genomics/01-intro-to-R.html" target="_blank">http://tracykteal.github.io/R-genomics/01-intro-to-R.html</a></p>
+<div id="r-syntax" class="section level2">
+<h2>R Syntax</h2>
+<p><em>Open up <code>Final_Analysis.R</code> and point out the following:</em></p>
+<ul>
+<li>The assignment operator <code>&lt;-</code><br /></li>
+<li>The <code>=</code> for arguments within functions.<br /></li>
+<li><code>#</code> for comments
+<ul>
+<li>This is where you can tell your reader important “behind the scenes” information.</li>
+</ul></li>
+<li>The <code>$</code> operator for working with columns inside of a data frame.<br /></li>
+<li>Indentation and spacing for easy reading - <strong>Code is made for humans</strong>.</li>
+</ul>
+<div id="a-principle-write-data-for-computers-and-code-for-humans." class="section level3">
+<h3>A principle: “Write data for computers and code for humans.”</h3>
+</div>
+</div>
+<div id="creating-objects" class="section level2">
+<h2>Creating objects</h2>
 </div>
 </div>
 
