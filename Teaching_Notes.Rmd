@@ -1,6 +1,42 @@
 ---
 title: "Teaching Notes for R-Genomics Data Carpentry Workshop"
+subtitle: "Software Carpentry Workshop in the Dept. of Human Genetics at the University of Michigan"
 author: "Marian L. Schmidt"
-date: "October 18, 2015"
-output: html_document
+date: "October 19 - 20, 2015"
+output:
+  html_document:
+    theme: united
+    toc: yes
 ---
+
+# Before We Start 
+Lesson Can be found at <a href="http://tracykteal.github.io/R-genomics/00-before-we-start.html" target="_blank">http://tracykteal.github.io/R-genomics/00-before-we-start.html</a> 
+
+##Learning Objectives  
+- Introduce participants to the RStudio interface  
+- Set up participants to have a working directory with a data/ folder inside  
+- Introduce R syntax  
+- Point to relevant information on how to get help, and understand how to ask well formulated questions
+
+##RStudio Interface 
+Go over the following:  
+
+- Console  
+- Script File
+- Environment, History  
+- Files, Plots, Packages, Help  
+
+Code and workflow are more reproducible if we can document **EVERYTHING** that we do!  
+
+##Our Goal  
+Other people can easily and exactly replicate our workflow and results  
+
+## Getting Started with Our Working Directory  
+1. Under `File`, click on `New Project`, choose `New Directory` then `Empty project`.  
+2. Enter a name for this new folder called `SWC_HumanGenetics` (known as a **working directory**).  This is where we will work for the rest of the workshop `(~/SWC_HumanGenetics)`.  
+3. Click on "Create Project".  
+4. Under the `Files` Tab on the right of the screen, click on `New Folder` and create a folder named `data` within `SWC_HumanGenetics` (i.e. `~/SWC_HumanGenetics/data`).  
+5. Create a New R Script called `Ecoli_Metagenomes.R` (`File` -> `New File` -> `R Script`) and save it within Your working directory.  
+6.  Does everyone's working directory look like this?  
+
+##  Interacting with R 
