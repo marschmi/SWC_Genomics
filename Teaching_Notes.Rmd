@@ -458,3 +458,59 @@ str(metadata)
 > 1. What does the `$` operator mean?  
 > 2. What do the integers mean at the end of the description for the columns that are `factors`?
 
+
+# Introducing `data.frame` - more on data frames 
+Lesson can be found at <a href="http://tracykteal.github.io/R-genomics/03-data-frames.html" target="_blank">http://tracykteal.github.io/R-genomics/03-data-frames.html</a>   
+
+##Learning Objectives  
+- Understand the concept of a `data.frame`  
+- Using sequences to index data  
+- Know how to access any element of a `data.frame`  
+
+##Indexing and sequences (within a vector)
+If we want to extract one or several values from a vector, we must provide one or several indices in **square brackets**, just as we did with the vectors - this time with 2 numbers:  
+
+- R indexes start at 1.  
+- `data.frame` objects have 2 dimensions - rows and columns  
+    + Therefore, we need to specify the “coordinates” we want from it.  
+    + Row numbers come first, followed by column numbers (i.e. [row, column]).  
+
+```{r metadata indexing, eval=FALSE, echo=TRUE}
+metadata[1, 2]   # first element in the 2nd column of the data frame
+metadata[1, 6]   # first element in the 6th column
+metadata[1:3, 7] # first three elements in the 7th column
+metadata[3, ]    # the 3rd element for all columns
+metadata[, 7]    # the entire 7th column
+head_meta <- metadata[1:6, ] # metadata[1:6, ] is equivalent to head(metadata)
+```
+
+### However, this method is not recommended!  
+
+##Indexing and sequences (within a data.frame)  
+For larger datasets, it can be tricky to remember the column number that corresponds to a particular variable. **(Are species names in column 5 or 7? oh, right… they are in column 6)**. In some cases, in which column the variable will be can change if the script you are using adds or removes columns. 
+
+It’s therefore often **better to use column names** to refer to a particular variable, and it makes your code easier to read and your intentions clearer.
+
+You can do operations on a particular column, by selecting it using the `$` sign.  
+
+- In this case, the entire column is a vector.  
+- You can use `names(metadata)` or `colnames(metadata)` to remind yourself of the column names.  
+For instance, to extract all the strain information from our datasets:
+```{r metadata strains, eval=FALSE, echo=TRUE}
+metadata$strain # Return all of the strains in the data frame
+```
+
+In some cases, you may want to select more than one column. You can do this using the square brackets. Suppose we wanted strain and clade information:
+```{r metadata column subset, eval=FALSE, echo=TRUE}
+metadata[, c("strain", "clade")] # Only select the strain and clade columns from metadata
+```
+
+You can even access columns by column name and select specific rows of interest. For example, if we wanted the strain and clade of just rows 4 through 7, we could do:
+```{r metadata column and row subset, eval=FALSE, echo=TRUE}
+metadata[4:7, c("strain", "clade")]
+```
+
+> **Exercise**  
+> Create a new object with a new name **without** the `strain` and `run` columns.  
+
+
