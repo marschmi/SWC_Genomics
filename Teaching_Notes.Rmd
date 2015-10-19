@@ -129,11 +129,35 @@ Lesson Can be found at <a href="http://tracykteal.github.io/R-genomics/01-intro-
 - The assignment operator `<-`  
 - The `=` for arguments within functions.  
 - `#` for comments  
-    + This is where you can tell your reader important "behind the scenes" information.
+    + This is where you can tell your reader important "behind the scenes" information.  
+    + **IMPORTANT:  You should ALWAYS heavily comment your code**
 - The `$` operator for working with columns inside of a data frame.  
 - Indentation and spacing for easy reading - **Code is made for humans**.  
 
 ### A principle:  "Write data for computers and code for humans."  
 
 ## Creating objects  
+We can do simple math with R.  
+
+```{r simple math uncommented, eval=FALSE, echo=TRUE}
+3+5
+12/7
+```
+
+**What is missing??**  COMMENTS!  ALWAYS comment code 
+```{r simple math commented, eval=FALSE, echo=TRUE}
+# Adding 3 and 5.  R is fun!
+3+5 
+``` 
+If we forget the `#`, **what happens?**  
+
+- *R is trying to run that sentence as a command*  
+- Now R has the `+`  
+    + How do we get out of this?  *`Esc`*    
+    
+To do more interesting things, we now need to learn about **variables and assignment operators.  **
+
+## Variables and Assignment Operators  
+
+
 
