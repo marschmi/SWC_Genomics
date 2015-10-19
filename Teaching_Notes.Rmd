@@ -1,7 +1,7 @@
 ---
 title: "Teaching Notes for R-Genomics Data Carpentry Workshop"
 subtitle: "Software Carpentry Workshop in the Dept. of Human Genetics at the University of Michigan"
-author: "Marian L. Schmidt"
+author: "Marian L. Schmidt (Using the R-Genomics lessons written by Kate Hertweck, Susan McClatchey, Tracy Teal, Ryan Williams)"
 date: "October 19 - 20, 2015"
 output:
   html_document:
@@ -9,8 +9,12 @@ output:
     toc: yes
 ---
 
+***
+
 # Before We Start 
-Lesson Can be found at <a href="http://tracykteal.github.io/R-genomics/00-before-we-start.html" target="_blank">http://tracykteal.github.io/R-genomics/00-before-we-start.html</a> 
+Lesson Can be found at <a href="http://tracykteal.github.io/R-genomics/00-before-we-start.html" target="_blank">http://tracykteal.github.io/R-genomics/00-before-we-start.html</a>  
+
+This lesson was written by Kate Hertweck, Susan McClatchey, Tracy Teal, Ryan Williams and is maintained by Tracy Teal.
 
 ##Learning Objectives  
 - Introduce participants to the RStudio interface  
@@ -118,10 +122,13 @@ dput(head(iris)) #Iris is an example data.frame that comes with R.  Head only sh
 sessionInfo()
 ```
 
-
+***
   
 # Introduction to R 
 Lesson can be found at <a href="http://tracykteal.github.io/R-genomics/01-intro-to-R.html" target="_blank">http://tracykteal.github.io/R-genomics/01-intro-to-R.html</a>   
+
+This lesson was written by Kate Hertweck, Susan McClatchey, Tracy Teal, Ryan Williams and is maintained by Tracy Teal.
+
 
 ##Learning Objectives  
 
@@ -132,7 +139,7 @@ Lesson can be found at <a href="http://tracykteal.github.io/R-genomics/01-intro-
 
 
 ## R Syntax  
-*Open up `Final_Analysis.R` and point out the following:*  
+*Instructor will open up `Final_Analysis.R`. Let's look at the following:*  
 
 - The assignment operator `<-`  
 - The `=` for arguments within functions.  
@@ -222,7 +229,8 @@ Another example, let's take the function `round()`:
 > Round Pi:  3.14159   
 > 1. How many arguments does round have?  
 > 2. What is the default of round?  
-> 3. Change the default to a different value.  What happens?
+> 3. Change the default to a different value.  What happens?  
+> 4. What happens when we round 2.5? 3.5?  What does this tell you about the round function?  
 
 ```{r round example, eval=FALSE, echo=TRUE}
 # Round pi
@@ -319,7 +327,13 @@ new_lengths <- 2 * glengths # multiply lengths by 2
 new_lengths
 ```
 
-This makes it easy to combine or work with data!
+This makes it easy to combine or work with data!  
+
+Let's take a look at our history in the top right of our console.  To do so we can click on the history tab or type 
+```{r history, echo=TRUE, eval=FALSE}
+history()  #Opens up the history pane in the top right of RStudio
+```
+
 
 What type of data is in our vector? 
 ```{r vector type, echo=TRUE, eval=FALSE}
@@ -353,8 +367,12 @@ Vectors are one of the many data structures that R uses. Other important ones ar
 > 1. What's the difference between a *data structure* and *data type*?  
 > 2. Discuss the definitions of *vector*, *object*, *function*, *arguments*.
 
+***
+
 # Starting with Data  
 Lesson can be found at <a href="http://tracykteal.github.io/R-genomics/02-starting-with-data.html" target="_blank">http://tracykteal.github.io/R-genomics/02-starting-with-data.html</a> 
+
+This lesson was written by Kate Hertweck, Susan McClatchey, Tracy Teal, Ryan Williams and is maintained by Tracy Teal.
 
 ##Learning Objectives  
 
@@ -383,8 +401,15 @@ genome_size  | size in Mbp (Made up for this lesson)
 
 1.  Make sure you are in the correct working directory by typing `getwd()`.  
 2. Create a new directory within this working directory called data.  
-3. Move the downloaded file into this directory.  
-4. Time to load the data into R!  
+3. Move the downloaded file into this directory.  Remember some of our unix commands:
+```{r move files to directory, eval=FALSE, echo=TRUE}
+cd  # Go to home directory 
+cd Downloads/ # Go to downloads
+ls *metadata.csv # list all files that end with "metadata.csv"
+mv Ecoli_metadata.csv ../SWC_HumanGenetics/data/ # Move the file to our working directory!
+```
+4. Check the status of your working directory.  Is the `Ecoli_metadata.csv` file within the `data` folder in the `SWC_HumanGenetics` working directory.
+5. Time to load the data into R!  
 
 ```{r load data1, eval=TRUE, echo=TRUE}
 getwd() # R's pwd - where are we?!
@@ -458,9 +483,13 @@ str(metadata)
 > 1. What does the `$` operator mean?  
 > 2. What do the integers mean at the end of the description for the columns that are `factors`?
 
+***
 
 # Introducing `data.frame` - more on data frames 
 Lesson can be found at <a href="http://tracykteal.github.io/R-genomics/03-data-frames.html" target="_blank">http://tracykteal.github.io/R-genomics/03-data-frames.html</a>   
+
+This lesson was written by Kate Hertweck, Susan McClatchey, Tracy Teal, Ryan Williams and is maintained by Tracy Teal.
+
 
 ##Learning Objectives  
 - Understand the concept of a `data.frame`  
@@ -513,4 +542,4 @@ metadata[4:7, c("strain", "clade")]
 > **Exercise**  
 > Create a new object with a new name **without** the `strain` and `run` columns.  
 
-
+***

@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
-<meta name="author" content="Marian L. Schmidt" />
+<meta name="author" content="Marian L. Schmidt (Using the R-Genomics lessons written by Kate Hertweck, Susan McClatchey, Tracy Teal, Ryan Williams)" />
 
 
 <title>Teaching Notes for R-Genomics Data Carpentry Workshop</title>
@@ -63,7 +63,7 @@ img {
 <div id="header">
 <h1 class="title">Teaching Notes for R-Genomics Data Carpentry Workshop</h1>
 <h3 class="subtitle"><em>Software Carpentry Workshop in the Dept. of Human Genetics at the University of Michigan</em></h3>
-<h4 class="author"><em>Marian L. Schmidt</em></h4>
+<h4 class="author"><em>Marian L. Schmidt (Using the R-Genomics lessons written by Kate Hertweck, Susan McClatchey, Tracy Teal, Ryan Williams)</em></h4>
 <h4 class="date"><em>October 19 - 20, 2015</em></h4>
 </div>
 
@@ -109,9 +109,11 @@ img {
 </ul>
 </div>
 
+<hr />
 <div id="before-we-start" class="section level1">
 <h1>Before We Start</h1>
 <p>Lesson Can be found at <a href="http://tracykteal.github.io/R-genomics/00-before-we-start.html" target="_blank">http://tracykteal.github.io/R-genomics/00-before-we-start.html</a></p>
+<p>This lesson was written by Kate Hertweck, Susan McClatchey, Tracy Teal, Ryan Williams and is maintained by Tracy Teal.</p>
 <div id="learning-objectives" class="section level2">
 <h2>Learning Objectives</h2>
 <ul>
@@ -252,12 +254,14 @@ help.search(&quot;mean&quot;)</code></pre>
 ##  [1] magrittr_1.5    formatR_1.2     tools_3.2.2     htmltools_0.2.6
 ##  [5] yaml_2.1.13     stringi_0.5-5   rmarkdown_0.8.1 knitr_1.11     
 ##  [9] stringr_1.0.0   digest_0.6.8    evaluate_0.7.2</code></pre>
+<hr />
 </div>
 </div>
 </div>
 <div id="introduction-to-r" class="section level1">
 <h1>Introduction to R</h1>
 <p>Lesson can be found at <a href="http://tracykteal.github.io/R-genomics/01-intro-to-R.html" target="_blank">http://tracykteal.github.io/R-genomics/01-intro-to-R.html</a></p>
+<p>This lesson was written by Kate Hertweck, Susan McClatchey, Tracy Teal, Ryan Williams and is maintained by Tracy Teal.</p>
 <div id="learning-objectives-1" class="section level2">
 <h2>Learning Objectives</h2>
 <ul>
@@ -269,7 +273,7 @@ help.search(&quot;mean&quot;)</code></pre>
 </div>
 <div id="r-syntax" class="section level2">
 <h2>R Syntax</h2>
-<p><em>Open up <code>Final_Analysis.R</code> and point out the following:</em></p>
+<p><em>Instructor will open up <code>Final_Analysis.R</code>. Let’s look at the following:</em></p>
 <ul>
 <li>The assignment operator <code>&lt;-</code><br /></li>
 <li>The <code>=</code> for arguments within functions.<br /></li>
@@ -357,7 +361,7 @@ c</code></pre>
 </ul>
 <p>Another example, let’s take the function <code>round()</code>:</p>
 <blockquote>
-<p><strong>Exercise:</strong><br />Round Pi: 3.14159<br />1. How many arguments does round have?<br />2. What is the default of round?<br />3. Change the default to a different value. What happens?</p>
+<p><strong>Exercise:</strong><br />Round Pi: 3.14159<br />1. How many arguments does round have?<br />2. What is the default of round?<br />3. Change the default to a different value. What happens?<br />4. What happens when we round 2.5? 3.5? What does this tell you about the round function?</p>
 </blockquote>
 <pre class="r"><code># Round pi
 round(3.14159) 
@@ -432,6 +436,8 @@ length(glengths) == length(species) # Are they the same length? </code></pre>
 new_lengths &lt;- 2 * glengths # multiply lengths by 2
 new_lengths</code></pre>
 <p>This makes it easy to combine or work with data!</p>
+<p>Let’s take a look at our history in the top right of our console. To do so we can click on the history tab or type</p>
+<pre class="r"><code>history()  #Opens up the history pane in the top right of RStudio</code></pre>
 <p>What type of data is in our vector?</p>
 <pre class="r"><code>class(glengths) # What type of data is in glengths?
 class(species)
@@ -455,11 +461,13 @@ lengths</code></pre>
 <blockquote>
 <p>Exercise:<br />1. What’s the difference between a <em>data structure</em> and <em>data type</em>?<br />2. Discuss the definitions of <em>vector</em>, <em>object</em>, <em>function</em>, <em>arguments</em>.</p>
 </blockquote>
+<hr />
 </div>
 </div>
 <div id="starting-with-data" class="section level1">
 <h1>Starting with Data</h1>
 <p>Lesson can be found at <a href="http://tracykteal.github.io/R-genomics/02-starting-with-data.html" target="_blank">http://tracykteal.github.io/R-genomics/02-starting-with-data.html</a></p>
+<p>This lesson was written by Kate Hertweck, Susan McClatchey, Tracy Teal, Ryan Williams and is maintained by Tracy Teal.</p>
 <div id="learning-objectives-2" class="section level2">
 <h2>Learning Objectives</h2>
 <ul>
@@ -518,7 +526,14 @@ lengths</code></pre>
 <ol style="list-style-type: decimal">
 <li>Make sure you are in the correct working directory by typing <code>getwd()</code>.<br /></li>
 <li>Create a new directory within this working directory called data.<br /></li>
-<li>Move the downloaded file into this directory.<br /></li>
+<li>Move the downloaded file into this directory. Remember some of our unix commands:</li>
+</ol>
+<pre class="r"><code>cd  # Go to home directory 
+cd Downloads/ # Go to downloads
+ls *metadata.csv # list all files that end with &quot;metadata.csv&quot;
+mv Ecoli_metadata.csv ../SWC_HumanGenetics/data/ # Move the file to our working directory!</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>Check the status of your working directory. Is the <code>Ecoli_metadata.csv</code> file within the <code>data</code> folder in the <code>SWC_HumanGenetics</code> working directory.</li>
 <li>Time to load the data into R!</li>
 </ol>
 <pre class="r"><code>getwd() # R's pwd - where are we?!</code></pre>
@@ -604,11 +619,13 @@ View(metadata) # View it!</code></pre>
 <blockquote>
 <p><strong>Exercise</strong><br />By looking at the str(metadata) output:<br />1. What does the <code>$</code> operator mean?<br />2. What do the integers mean at the end of the description for the columns that are <code>factors</code>?</p>
 </blockquote>
+<hr />
 </div>
 </div>
 <div id="introducing-data.frame---more-on-data-frames" class="section level1">
 <h1>Introducing <code>data.frame</code> - more on data frames</h1>
 <p>Lesson can be found at <a href="http://tracykteal.github.io/R-genomics/03-data-frames.html" target="_blank">http://tracykteal.github.io/R-genomics/03-data-frames.html</a></p>
+<p>This lesson was written by Kate Hertweck, Susan McClatchey, Tracy Teal, Ryan Williams and is maintained by Tracy Teal.</p>
 <div id="learning-objectives-3" class="section level2">
 <h2>Learning Objectives</h2>
 <ul>
@@ -655,6 +672,7 @@ head_meta &lt;- metadata[1:6, ] # metadata[1:6, ] is equivalent to head(metadata
 <blockquote>
 <p><strong>Exercise</strong><br />Create a new object with a new name <strong>without</strong> the <code>strain</code> and <code>run</code> columns.</p>
 </blockquote>
+<hr />
 </div>
 </div>
 
