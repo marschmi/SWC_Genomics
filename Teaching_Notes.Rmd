@@ -224,7 +224,7 @@ round(3.14159)
 args(round)  
 
 # Changing the default number of digits to 3
-round(3.14159, digits = 3) 
+round(3.14159, digits = 3)  #Recommended!
 round(3.14159, 3) ## NOT recommended for functions with more than one argument!!  
 ```
 We get 3, that's because the default is to round to the nearest whole number.  
@@ -242,9 +242,36 @@ ecoli_genome_weight_pg <- ecoli_genome_length_mb / 978.0
 ecoli_genome_weight_pg # Ecoli genomes don't weigh very much. 
 ```  
 
+#####Human Genome
+```{r Human genome, eval=TRUE, echo=TRUE}
+human_genome_length_mb <- 30000 # This is for an e-coli genome
+human_genome_length_mb
+human_genome_weight_pg <- human_genome_length_mb / 978.0 # To calculate the number of picograms that human genomes weight
+human_genome_weight_pg # Human genomes don't weigh very much. 
+```  
+
+#####Comparing things  
+- `==` denotes equality.  Reads as "is equal to"  
+- `!=` denotes inequality.  Reads as "is not equal to"  
+- `<` "less than"  
+- `<=` "less than or equal to"  
+- `>` "greater than"  
+- `>=` "greater than or equal to"  
+
+```{r comparing things, eval=TRUE, echo=TRUE}
+1 ==1 # is 1 equal to 1?
+1 != 1 # is 1 inequal to 1?   
+1 < 2 # Is 1 less than 2?
+```
 
 
+> **Exercise:**  
+> Compare the lengths of `ecoli_genome_length_mb`  and `human_genome_length_mb`. 
 
+```{r compare human and ecoli, eval=TRUE, echo=TRUE}
+human_genome_length_mb == ecoli_genome_length_mb # Are the genome lengths equal  
+
+```
 
 
 

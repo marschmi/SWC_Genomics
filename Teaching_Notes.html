@@ -342,7 +342,7 @@ args(round)  </code></pre>
 <pre><code>## function (x, digits = 0) 
 ## NULL</code></pre>
 <pre class="r"><code># Changing the default number of digits to 3
-round(3.14159, digits = 3) </code></pre>
+round(3.14159, digits = 3)  #Recommended!</code></pre>
 <pre><code>## [1] 3.142</code></pre>
 <pre class="r"><code>round(3.14159, 3) ## NOT recommended for functions with more than one argument!!  </code></pre>
 <pre><code>## [1] 3.142</code></pre>
@@ -358,6 +358,37 @@ ecoli_genome_length_mb</code></pre>
 <pre class="r"><code>ecoli_genome_weight_pg &lt;- ecoli_genome_length_mb / 978.0
 ecoli_genome_weight_pg # Ecoli genomes don't weigh very much. </code></pre>
 <pre><code>## [1] 0.004703476</code></pre>
+</div>
+<div id="human-genome" class="section level5">
+<h5>Human Genome</h5>
+<pre class="r"><code>human_genome_length_mb &lt;- 30000 # This is for an e-coli genome
+human_genome_length_mb</code></pre>
+<pre><code>## [1] 30000</code></pre>
+<pre class="r"><code>human_genome_weight_pg &lt;- human_genome_length_mb / 978.0 # To calculate the number of picograms that human genomes weight
+human_genome_weight_pg # Human genomes don't weigh very much. </code></pre>
+<pre><code>## [1] 30.67485</code></pre>
+</div>
+<div id="comparing-things" class="section level5">
+<h5>Comparing things</h5>
+<ul>
+<li><code>==</code> denotes equality. Reads as “is equal to”<br /></li>
+<li><code>!=</code> denotes inequality. Reads as “is not equal to”<br /></li>
+<li><code>&lt;</code> “less than”<br /></li>
+<li><code>&lt;=</code> “less than or equal to”<br /></li>
+<li><code>&gt;</code> “greater than”<br /></li>
+<li><code>&gt;=</code> “greater than or equal to”</li>
+</ul>
+<pre class="r"><code>1 ==1 # is 1 equal to 1?</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>1 != 1 # is 1 inequal to 1?   </code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>1 &lt; 2 # Is 1 less than 2?</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<blockquote>
+<p><strong>Exercise:</strong><br />Compare the lengths of <code>ecoli_genome_length_mb</code> and <code>human_genome_length_mb</code>.</p>
+</blockquote>
+<pre class="r"><code>human_genome_length_mb == ecoli_genome_length_mb # Are the genome lengths equal  </code></pre>
+<pre><code>## [1] FALSE</code></pre>
 </div>
 </div>
 </div>
