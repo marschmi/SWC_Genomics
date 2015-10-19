@@ -1,0 +1,6 @@
+---
+title: "Teaching Notes for R-Genomics Data Carpentry Workshop"
+author: "Marian L. Schmidt"
+date: "October 18, 2015"
+output: html_document
+---
