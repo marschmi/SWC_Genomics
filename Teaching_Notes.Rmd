@@ -10,6 +10,11 @@ output:
 ---
 
 ***
+> **Discuss:**  
+> What's your current data analysis workflow?  
+> Chat with your neighbors!
+
+***
 
 # Before We Start 
 Lesson Can be found at <a href="http://tracykteal.github.io/R-genomics/00-before-we-start.html" target="_blank">http://tracykteal.github.io/R-genomics/00-before-we-start.html</a>  
@@ -541,5 +546,270 @@ metadata[4:7, c("strain", "clade")]
 
 > **Exercise**  
 > Create a new object with a new name **without** the `strain` and `run` columns.  
+
+***
+
+
+# Aggregating and analyzing data with dplyr
+Lesson can be found at <a href="http://tracykteal.github.io/R-genomics/04-dplyr.html" target="_blank">http://tracykteal.github.io/R-genomics/04-dplyr.html</a>   
+
+This lesson was written by Kate Hertweck, Susan McClatchey, Tracy Teal, Ryan Williams and is maintained by Tracy Teal.
+
+
+## Data manipulation using dplyr 
+
+Bracket subsetting is handy, but it can be cumbersome and difficult to read, especially for complicated operations. 
+
+Enter `dplyr`.
+
+`dplyr` is a package for making data manipulation easier.
+
+**Packages** in R are basically sets of additional functions that let you do more stuff in R. The functions we’ve been using, like str(), come built into R; packages give you access to more functions. You need to install a package and then load it to be able to use it.
+
+```{r install dplyr, eval=FALSE, echo=TRUE}
+install.packages("dplyr") ## install dplyr
+```
+
+You might get asked to choose a CRAN mirror – this is basically asking you to choose a site to download the package from. The choice doesn’t matter too much; I’d recommend choosing the RStudio mirror.
+
+```{r load dplyr, eval=FALSE, echo=TRUE}
+library("dplyr")          ## load
+```
+
+You only need to install a package once per computer, but you need to load it every time you open a new R session and want to use that package.  
+
+## What is dplyr?
+
+`dplyr` is:  
+
+- a fairly new (2014) package that tries to provide easy tools for the most common data manipulation tasks.  
+- Built to work with data frames.  
+- Inspired by the `plyr` package, which has been in use for some time but suffered from being slow in some cases.  
+    + `dplyr` addresses this by porting much of the computation to C++.  
+- An additional feature is the ability to work with data stored directly in an external database.  
+- The benefits of doing this are that the data can be managed natively in a relational database, queries can be conducted on that database, and only the results of the query returned.
+
+This addresses a common problem with R in that all operations are conducted in memory and thus the amount of data you can work with is limited by available memory. The database connections essentially remove that limitation in that you can have a database of many 100s GB, conduct queries on it directly and pull back just what you need for analysis in R.
+
+###Selecting columns and filtering rows
+
+We’re going to learn some of the most common dplyr functions:  
+
+- `select()`  
+- `filter()`  
+- `mutate()`  
+- `group_by()`  
+- `summarize()` 
+
+To select columns of a data frame, use `select().` 
+
+The first argument to this function is the data frame (`metaadata`), and the subsequent arguments are the columns to keep.
+
+```{r select dplyr, eval=FALSE, echo=TRUE}
+select(metadata, sample, clade, cit, genome_size) #select 4 columns
+```
+
+To choose rows, use `filter()`:
+
+```{r filter dplyr, eval=FALSE, echo=TRUE}
+filter(metadata, cit == "plus") # select only rows that are the citrate plus mutant
+```
+
+
+### Pipes
+But what if you wanted to select and filter? 
+
+There are three ways to do this: 
+
+1. **Use intermediate steps:** Create a temporary data frame and use that as input to the next function.  This can clutter up your workspace with lots of objects.
+2. **Nested functions:** You can also nest functions by putting one function inside of another. This is handy, but can be difficult to read if too many functions are nested as the process from inside out. 
+3. **Pipes:** A fairly recent addition to R.  Pipes let you take the output of one function and send it directly to the next, which is useful when you need to do many things to the same data set.  
+    + Pipes in R look like `%>%` and are made available via the `magrittr` package installed as part of `dplyr`.
+    
+Let's say we would like to do the following:
+
+- Pick only the citrate plus mutants AND pick the sample, generation, and clade columns.  All in one set of function calls.  Enter pipes.
+
+```{r pipes dplyr, eval=FALSE, echo=TRUE}
+metadata %>%
+  filter(cit == "plus") %>%
+  select(sample, generation, clade)
+```
+
+In the above we use the pipe to send the metadata data set first through filter, to keep rows where cit was equal to ‘plus’, and then through select to keep the sample and generation and clade columns. 
+
+When the data frame is being passed to the `filter()` and `select()` functions through a pipe, we don’t need to include it as an argument to these functions anymore.
+
+If we wanted to create a new object with this smaller version of the data we could do so by assigning it a new name:
+```{r pipes dplyr variable, eval=FALSE, echo=TRUE}
+meta_citplus <- metadata %>%
+  filter(cit == "plus") %>%
+  select(sample, generation, clade)
+
+meta_citplus
+```
+
+> **Challenge**  
+> Using pipes, subset the data to include rows where the clade is ‘Cit+’. Retain columns `sample`, `cit`, and `genome_size`.
+
+### Mutate  
+Frequently you’ll want to create new columns based on the values in existing columns, for example to do unit conversions or find the ratio of values in two columns. For this we’ll use `mutate()`.
+
+To create a new column of genome size in bp:
+```{r mutate dplyr, eval=FALSE, echo=TRUE}
+metadata %>%
+    mutate(genome_bp = genome_size *1e6) # 1 Mbp = 10^6 bp
+```
+
+If this runs off your screen and you just want to see the first few rows, you can use a pipe to view the `head()` of the data (pipes work with non-dplyr functions too, as long as the `dplyr` or `magrittr` packages are loaded).
+
+```{r mutate head dplyr, eval=FALSE, echo=TRUE}
+metadata %>%
+  mutate(genome_bp = genome_size *1e6) %>%
+  head
+```
+
+The row has a `NA` value for clade, so if we wanted to remove those we could insert a filter() in this chain:
+
+```{r mutate & filter dplyr, eval=FALSE, echo=TRUE}
+metadata %>%
+  mutate(genome_bp = genome_size *1e6) %>%
+  filter(!is.na(clade)) %>% # select all rows where clade is NOT an NA
+  head
+```
+
+`is.na()` is a function that determines whether something is or is not an `NA`. The `!` symbol negates it, so we’re asking for everything that is not an `NA`.
+
+
+### Split-apply-combine data analysis and the `summarize()` function  
+Many data analysis tasks can be approached using the “split-apply-combine” paradigm:  
+
+1.  Split the data into groups.  
+2.  Apply some analysis to each group, and  
+3.  Combine the results.  
+
+dplyr makes this very easy through the use of the `group_by()` function. `group_by()` splits the data into groups upon which some operations can be run. 
+
+For example, if we wanted to group by citrate-using mutant status and find the number of rows of data for each status, we would do:
+
+```{r group_by tally dplyr, eval=FALSE, echo=TRUE}
+metadata %>%
+  group_by(cit) %>%  
+  tally()  # tallies each group.
+```
+
+`count()` is the same as tally but alrea will also do the same thing: 
+```{r group_by count dplyr, eval=FALSE, echo=TRUE}
+metadata %>%
+  count(cit)  # tallies each group but has the group.
+```
+
+There are several different summary statistics that can be generated from our data. The R base package provides many built-in functions such as:  
+
+- `mean()`  
+- `median()`  
+- `min()` & `max()`  
+- `range`
+
+By default, all R functions operating on vectors that contains missing data will return `NA`. It’s a way to make sure that users know they have missing data, and make a conscious decision on how to deal with it. 
+
+When dealing with simple statistics like the `mean()`, the easiest way to ignore `NA` (the missing data) is to use `na.rm=TRUE` (rm stands for remove).
+
+`group_by()` is often used together with `summarize()` which collapses each group into a single-row summary of that group. `summarize()` can then be used to apply a function such as those that compute simple stats to give an overview for the group. So to view mean genome_size by mutant status:
+
+```{r summarize mean genome size, eval=FALSE, echo=TRUE}
+metadata %>%
+  group_by(cit) %>%
+  summarize(mean_size = mean(genome_size, na.rm = TRUE))
+```
+
+You can group by multiple columns too:
+```{r group_by multiple columns, eval=FALSE, echo=TRUE}
+metadata %>%
+  group_by(cit, clade) %>%
+  summarize(mean_size = mean(genome_size, na.rm = TRUE))
+```
+
+Looks like for one of these clones, the clade is missing. We could then discard those rows using `filter()`:
+
+```{r dplyr2, eval=FALSE, echo=TRUE}
+metadata %>%
+  group_by(cit, clade) %>%
+  summarize(mean_size = mean(genome_size, na.rm = TRUE)) %>%
+  filter(!is.na(clade))
+```
+
+What do we notice about the output??  
+
+`dplyr` has changed our `data.frame` to a `tbl_df`. This is a data structure that’s very similar to a data frame; for our purposes the only difference is that it won’t automatically show tons of data going off the screen.  
+
+```{r glimpse, eval=FALSE, echo=TRUE}
+glimpse(metadata) # dplyr version, very convenient for the screen
+str(metadta)
+``` 
+
+Link to the RStudio <a href="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf" target="_blank"> Data Wrangling Cheat Sheet</a>  
+
+
+***
+# Data Visualization 
+Lesson can be found at <a href="http://tracykteal.github.io/R-genomics/05-data-visualization.html" target="_blank">http://tracykteal.github.io/R-genomics/05-data-visualization.html</a>   
+
+This lesson was written by Kate Hertweck, Susan McClatchey, Tracy Teal, Ryan Williams and is maintained by Tracy Teal.
+
+##Learning Objectives  
+- Basic plots  
+- Advanced plots (introducing ggplot)  
+- Writing images (and other things) to file
+
+## Basic Plots in R 
+The mathematician Richard Hamming once said, “The purpose of computing is insight, not numbers”, and the best way to develop insight is often to visualize data. Visualization deserves an entire lecture (or course) of its own, but we can explore a few features of R’s plotting packages.
+
+When we are working with large sets of numbers it can be useful to display that information graphically. R has a number of built-in tools for basic graph types such as hisotgrams with `hist()`, scatter plots with `plot()`, bar charts with `barplot()`, boxplots with `boxplot()` and much,<a href="http://www.statmethods.net/graphs/" target="_blank">much more</a>    
+
+We’ll test a few of these out here on the genome_size vector from our metadata.
+
+```{r genome size for plotting, echo=TRUE, eval = FALSE}
+genome_size <- metadata$genome_size
+```
+
+
+## Scatterplot
+Let’s start with a scatterplot. A scatter plot provides a graphical view of the relationship between two sets of numbers. 
+
+We don’t have a variable in our metadata that is a continous variable, so there is nothing to plot it against but we can plot the values against their **index** values just to demonstrate the function.
+
+```{r genome size base scatterplot, echo=TRUE, eval = FALSE}
+plot(genome_size) # Scatter plot
+```
+
+Each point represents a clone and the value on the x-axis is the clone index in the file, where the values on the y-axis correspond to the genome size for the clone. For any plot you can customize many features of your graphs (fonts, colors, axes, titles) through graphic options.  
+
+For example, we can change the shape and add a title of the data point using pch.
+
+```{r pch scatterplot, echo=TRUE, eval = FALSE}
+plot(genome_size, pch=8)  # Change the symbol
+plot(genome_size, pch=8, main="Scatter plot of genome sizes") # Add a title 
+```
+
+
+## Histogram  
+Another way to visualize the distribution of genome sizes is to use a histogram, we can do this buy using the `hist()` function:
+
+```{r base histogram, echo=TRUE, eval = FALSE}
+#histograms
+hist(genome_size)  # Create histogram of genome sizes
+hist(genome_size, breaks = 10)
+```
+
+## Boxplot
+Using additional information from our metadata, we can use plots to compare values between the different citrate mutant status using a boxplot. A boxplot provides a graphical view of the median, quartiles, maximum, and minimum of a data set.
+
+# Boxplot
+boxplot(genome_size ~ cit, metadata)
+
+
+
+
 
 ***

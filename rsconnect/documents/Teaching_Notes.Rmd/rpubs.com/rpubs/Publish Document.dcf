@@ -3,6 +3,5 @@ account: rpubs
 server: rpubs.com
 bundleId:
         https://api.rpubs.com/api/v1/document/118588/1477876ab5d1455d9c2d35b31182bf13
-url:
-        http://rpubs.com/publish/claim/118588/a3c1e12608cd4494affe5b5da8cf4cd3
-when: 1445270443.32098
+url: http://rpubs.com/marschmi/118588
+when: 1445270902.21764
