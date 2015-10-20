@@ -944,4 +944,30 @@ ggplot(metadata, aes(x = cit, y = genome_size, fill = cit)) +
 ```
 
 
+## Writing figures to file
+There are two ways in which figures and plots can be output to a file (rather than simply displaying on screen).   
+
+1.  **Easier way:** Export directly from the RStudio ‘Plots’ panel, by clicking on Export when the image is plotted. This will give you the option of `png` or `pdf` and selecting the directory to which you wish to save it to.  
+2.  Use R functions that allow you the flexibility to specify parameters to dictate the size and resolution of the output image. Some of the more popular formats include `pdf()`, `png()`.
+
+Initialize a plot that will be written directly to a file using pdf, png etc. Within the function you will need to specify a name for your image, and the with and height (optional). Then create a plot using the usual functions in R. Finally, close the file using the dev.off() function. There are also bmp, tiff, and jpeg functions, though the jpeg function has proven less stable than the others.
+
+Make a new folder called `figures` to store plots in.
+
+```{r saving figures, eval=FALSE, echo=TRUE}
+pdf("figures/boxplot.pdf")
+
+ggplot(metadata, aes(x = cit, y = genome_size, fill = cit)) +
+  geom_boxplot() +
+  ggtitle("Boxplot of genome size by citrate mutant type") +
+  xlab("citrate mutant") +
+  ylab("genome size") + 
+  theme(panel.grid.major = element_line(size = .5, color = "grey"),
+          axis.text.x = element_text(angle=45, hjust=1),
+          axis.title = element_text(size = rel(1.5)),
+          axis.text = element_text(size = rel(1.25)))
+
+dev.off()
+
+```
 ***

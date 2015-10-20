@@ -126,6 +126,7 @@ img {
 <li><a href="#histogram-1">Histogram</a></li>
 <li><a href="#boxplot-1">Boxplot</a></li>
 </ul></li>
+<li><a href="#writing-figures-to-file">Writing figures to file</a></li>
 </ul></li>
 </ul>
 </div>
@@ -983,8 +984,31 @@ ggplot(metadata, aes(x = genome_size, fill = cit)) +
           axis.text.x = element_text(angle=45, hjust=1),
           axis.title = element_text(size = rel(1.5)),
           axis.text = element_text(size = rel(1.25)))</code></pre>
-<hr />
 </div>
+</div>
+<div id="writing-figures-to-file" class="section level2">
+<h2>Writing figures to file</h2>
+<p>There are two ways in which figures and plots can be output to a file (rather than simply displaying on screen).</p>
+<ol style="list-style-type: decimal">
+<li><strong>Easier way:</strong> Export directly from the RStudio ‘Plots’ panel, by clicking on Export when the image is plotted. This will give you the option of <code>png</code> or <code>pdf</code> and selecting the directory to which you wish to save it to.<br /></li>
+<li>Use R functions that allow you the flexibility to specify parameters to dictate the size and resolution of the output image. Some of the more popular formats include <code>pdf()</code>, <code>png()</code>.</li>
+</ol>
+<p>Initialize a plot that will be written directly to a file using pdf, png etc. Within the function you will need to specify a name for your image, and the with and height (optional). Then create a plot using the usual functions in R. Finally, close the file using the dev.off() function. There are also bmp, tiff, and jpeg functions, though the jpeg function has proven less stable than the others.</p>
+<p>Make a new folder called <code>figures</code> to store plots in.</p>
+<pre class="r"><code>pdf(&quot;figures/boxplot.pdf&quot;)
+
+ggplot(metadata, aes(x = cit, y = genome_size, fill = cit)) +
+  geom_boxplot() +
+  ggtitle(&quot;Boxplot of genome size by citrate mutant type&quot;) +
+  xlab(&quot;citrate mutant&quot;) +
+  ylab(&quot;genome size&quot;) + 
+  theme(panel.grid.major = element_line(size = .5, color = &quot;grey&quot;),
+          axis.text.x = element_text(angle=45, hjust=1),
+          axis.title = element_text(size = rel(1.5)),
+          axis.text = element_text(size = rel(1.25)))
+
+dev.off()</code></pre>
+<hr />
 </div>
 </div>
 
