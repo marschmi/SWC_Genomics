@@ -123,11 +123,12 @@ img {
 <li><a href="#boxplot">Boxplot</a></li>
 </ul></li>
 <li><a href="#advanced-figures-with-ggplot2">Advanced figures with <code>ggplot2</code></a><ul>
+<li><a href="#writing-figures-to-file">Writing figures to file</a></li>
 <li><a href="#histogram-1">Histogram</a></li>
 <li><a href="#boxplot-1">Boxplot</a></li>
 </ul></li>
+<li><a href="#error-bars">Error bars</a></li>
 <li><a href="#faceting-plots">Faceting plots</a></li>
-<li><a href="#writing-figures-to-file">Writing figures to file</a></li>
 </ul></li>
 </ul>
 </div>
@@ -736,7 +737,8 @@ head_meta &lt;- metadata[1:6, ] # metadata[1:6, ] is equivalent to head(metadata
 <p>We’re going to learn some of the most common dplyr functions:</p>
 <ul>
 <li><code>select()</code><br /></li>
-<li><code>filter()</code><br /></li>
+<li><code>filter()</code></li>
+<li><code>arrange()</code></li>
 <li><code>mutate()</code><br /></li>
 <li><code>group_by()</code><br /></li>
 <li><code>summarize()</code></li>
@@ -746,6 +748,27 @@ head_meta &lt;- metadata[1:6, ] # metadata[1:6, ] is equivalent to head(metadata
 <pre class="r"><code>select(metadata, sample, clade, cit, genome_size) #select 4 columns</code></pre>
 <p>To choose rows, use <code>filter()</code>:</p>
 <pre class="r"><code>filter(metadata, cit == &quot;plus&quot;) # select only rows that are the citrate plus mutant</code></pre>
+<blockquote>
+<p><strong>Challenge:</strong></p>
+<ol style="list-style-type: decimal">
+<li>Filter out samples that have a genome size that is equal or greater than 4.74.</li>
+<li>Filter out mutants that are “unknown” <strong>and</strong> are before generations 25,000.</li>
+</ol>
+</blockquote>
+<p>To re-order or arrange the output, use <code>arrange()</code>:</p>
+<pre class="r"><code>arrange(metadata, genome_size) # arrange by ascending genome_size
+arrange(metadata, -genome_size) # arrange by -ascending genome_size
+arrange(metadata, -generation) # arrange by descending generation</code></pre>
+<blockquote>
+<p><strong>Challenge:</strong></p>
+<p>Create a new object named <code>arranged_metadata</code> where <code>metadata</code> is arranged first by descending generation and second by ascending clade</p>
+</blockquote>
+<p>Summary so far:</p>
+<ul>
+<li><code>select()</code>: To subset certain <strong>columns</strong> out of the data.<br /></li>
+<li><code>filter()</code>: To subset specific <strong>rows</strong> out of the data.</li>
+<li><code>arrange()</code>: To sort the data frame by columns.</li>
+</ul>
 </div>
 <div id="pipes" class="section level3">
 <h3>Pipes</h3>
@@ -775,7 +798,7 @@ head_meta &lt;- metadata[1:6, ] # metadata[1:6, ] is equivalent to head(metadata
 
 meta_citplus</code></pre>
 <blockquote>
-<p><strong>Challenge</strong><br />Using pipes, subset the data to include rows where the clade is ‘Cit+’. Retain columns <code>sample</code>, <code>cit</code>, and <code>genome_size</code>.</p>
+<p><strong>Challenge</strong><br />Using pipes, subset the data to include rows where the clade is ‘unknown+’. Retain columns <code>sample</code>, <code>cit</code>, and <code>genome_size</code>. Finally arrange the output by descending genome_size.</p>
 </blockquote>
 </div>
 <div id="mutate" class="section level3">
@@ -788,12 +811,14 @@ meta_citplus</code></pre>
 <pre class="r"><code>metadata %&gt;%
   mutate(genome_bp = genome_size *1e6) %&gt;%
   head</code></pre>
-<p>The row has a <code>NA</code> value for clade, so if we wanted to remove those we could insert a filter() in this chain:</p>
+<p>The row has a <code>NA</code> value for clade, so if we wanted to remove those we could insert a <code>filter()</code> in this chain:</p>
+<p>We can do this by using the <code>is.na()</code> command.</p>
+<p><code>is.na()</code> is a function that determines whether something is or is not an <code>NA</code>. The <code>!</code> symbol negates it, so we’re asking for everything that is not an <code>NA</code>.</p>
+<p>Remember the <code>!=</code> inequality operations, we can use this with <code>is.na()</code> by placing it before the command like this <code>!is.na()</code>.</p>
 <pre class="r"><code>metadata %&gt;%
   mutate(genome_bp = genome_size *1e6) %&gt;%
   filter(!is.na(clade)) %&gt;% # select all rows where clade is NOT an NA
   head</code></pre>
-<p><code>is.na()</code> is a function that determines whether something is or is not an <code>NA</code>. The <code>!</code> symbol negates it, so we’re asking for everything that is not an <code>NA</code>.</p>
 </div>
 <div id="split-apply-combine-data-analysis-and-the-summarize-function" class="section level3">
 <h3>Split-apply-combine data analysis and the <code>summarize()</code> function</h3>
@@ -816,7 +841,7 @@ meta_citplus</code></pre>
 <li><code>mean()</code><br /></li>
 <li><code>median()</code><br /></li>
 <li><code>min()</code> &amp; <code>max()</code><br /></li>
-<li><code>range</code></li>
+<li><code>range()</code></li>
 </ul>
 <p>By default, all R functions operating on vectors that contains missing data will return <code>NA</code>. It’s a way to make sure that users know they have missing data, and make a conscious decision on how to deal with it.</p>
 <p>When dealing with simple statistics like the <code>mean()</code>, the easiest way to ignore <code>NA</code> (the missing data) is to use <code>na.rm=TRUE</code> (rm stands for remove).</p>
@@ -833,6 +858,16 @@ meta_citplus</code></pre>
   group_by(cit, clade) %&gt;%
   summarize(mean_size = mean(genome_size, na.rm = TRUE)) %&gt;%
   filter(!is.na(clade))</code></pre>
+<blockquote>
+<p><strong>Challenge:</strong><br />Let’s calculate summary statistics! All in one go, let’s do the following:</p>
+<ol style="list-style-type: decimal">
+<li>Group by <code>cit</code><br /></li>
+<li>Calculate the <code>mean()</code> generation for each mutant.<br /></li>
+<li>Calculate the <code>median()</code> generation for each mutant.</li>
+<li>Calculate the <code>min()</code> generation for each mutant.<br /></li>
+<li>calculate the <code>max()</code> generation for each mutant.</li>
+</ol>
+</blockquote>
 <p>What do we notice about the output??</p>
 <p><code>dplyr</code> has changed our <code>data.frame</code> to a <code>tbl_df</code>. This is a data structure that’s very similar to a data frame; for our purposes the only difference is that it won’t automatically show tons of data going off the screen.</p>
 <pre class="r"><code>glimpse(metadata) # dplyr version, very convenient for the screen
@@ -890,6 +925,7 @@ boxplot(metadata$genome_size ~ metadata$cit) # Creates a box and whisker plot</c
 <div id="advanced-figures-with-ggplot2" class="section level2">
 <h2>Advanced figures with <code>ggplot2</code></h2>
 <p>More recently, R users have moved away from base graphic options and towards a plotting package called <code>ggplot2</code> that adds a lot of functionality to the basic plots seen above.</p>
+<p>An amazing resource for <code>ggplot2</code> is the <a href="http://www.cookbook-r.com/Graphs/" target="_blank">R Cookbook written by Winston Chang</a></p>
 <p>The syntax takes some getting used to but it’s extremely powerful and flexible. We can start by re-creating some of the above plots but using <code>ggplot2</code> functions to get a feel for the syntax.</p>
 <p><code>ggplot()</code> is best used on data in the <code>data.frame</code> form, so we will work with metadata for the following figures. Let’s start by loading the ggplot2 library.</p>
 <pre class="r"><code>install.packages(&quot;ggplot2&quot;)
@@ -914,6 +950,7 @@ library(ggplot2)</code></pre>
 <li>linetype</li>
 <li>size</li>
 </ul>
+<p><a href="https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf">ggplot Cheat Sheet</a></p>
 <pre class="r"><code>ggplot(metadata, aes(x = sample, y= genome_size)) +
   geom_point()
 # above is the same as below
@@ -963,6 +1000,30 @@ ggplot(metadata, aes(x = generation, y= genome_size, color = generation, shape =
   geom_point(size = rel(3.0)) + 
   theme(axis.text.x = element_text(angle=45, hjust=1)) + 
   coord_flip()</code></pre>
+<div id="writing-figures-to-file" class="section level3">
+<h3>Writing figures to file</h3>
+<p>There are two ways in which figures and plots can be output to a file (rather than simply displaying on screen).</p>
+<ol style="list-style-type: decimal">
+<li><strong>Easier way:</strong> Export directly from the RStudio ‘Plots’ panel, by clicking on Export when the image is plotted. This will give you the option of <code>png</code> or <code>pdf</code> and selecting the directory to which you wish to save it to.<br /></li>
+<li><strong>More reproducible way:</strong> Use R functions that allow you the flexibility to specify parameters to dictate the size and resolution of the output image. Some of the more popular formats include <code>pdf()</code>, <code>png()</code>, <code>jpeg()</code>, <code>tiff()</code>etc.</li>
+</ol>
+<p>Initialize a plot that will be written directly to a file using <code>pdf()</code>, <code>png()</code>, <code>jpeg()</code>, <code>tiff()</code> etc.</p>
+<p>Within the function you will need to:</p>
+<ol style="list-style-type: decimal">
+<li>Specify a name for your image.<br /></li>
+<li>Provide the width and height (optional).<br /></li>
+<li>Create a plot using the usual functions in R.<br /></li>
+<li>Close the file using the <code>dev.off()</code> function.</li>
+</ol>
+<p>Make a new folder called <code>figures</code> to store plots in.</p>
+<pre class="r"><code>pdf(&quot;figures/genome_size_vs_generation.pdf&quot;, width = 7, height = 5)
+
+ggplot(metadata, aes(x = generation, y= genome_size, color = generation, shape = cit)) +
+  geom_point(size = rel(3.0)) +
+  theme(axis.text.x = element_text(angle=45, hjust=1))
+
+dev.off()</code></pre>
+</div>
 <div id="histogram-1" class="section level3">
 <h3>Histogram</h3>
 <p>To plot a histogram we require another geometric object <code>geom_bar()</code>, which requires a statistical transformation. Some plot types (such as scatterplots) do not require transformations, each point is plotted at x and y coordinates equal to the original value. Other plots, such as boxplots, histograms, prediction lines etc. need to be transformed, and usually has a default statistic that can be changed via the stat_bin argument.</p>
@@ -990,6 +1051,10 @@ ggplot(metadata, aes(x = genome_size, fill = cit)) +
   geom_bar(stat = &quot;bin&quot;, color = &quot;black&quot;, binwidth=0.01) + 
   theme_bw() + 
   theme(legend.position = c(0.8, 0.8)) # (x,y) Think of each side of the plot to be 1 </code></pre>
+<blockquote>
+<p><strong>Challenge:</strong></p>
+<p>Re-create the histogram plots from above. This time, save each of the plots that you make in the <code>figures</code> folder.</p>
+</blockquote>
 </div>
 <div id="boxplot-1" class="section level3">
 <h3>Boxplot</h3>
@@ -1005,16 +1070,36 @@ ggplot(metadata, aes(x = genome_size, fill = cit)) +
           axis.text = element_text(size = rel(1.25)))</code></pre>
 </div>
 </div>
+<div id="error-bars" class="section level2">
+<h2>Error bars</h2>
+<p>Box and whisker plots are nice, but maybe we would prefer to calculate the mean and standard deviation of the genome_size within each of the citrate mutants with error bars.</p>
+<p>To plot scatter plots with error bars, we use <code>geom_errobar()</code>.</p>
+<ul>
+<li><code>geom_errorbar(width = 0.1, aes(ymin = mean - sd, ymax = mean + sd))</code>
+<ul>
+<li>The <code>width</code> argument will make wider error bars.</li>
+</ul></li>
+</ul>
+<p>This means that we will have to calculate both the mean and the standard deviaition.</p>
+<blockquote>
+<p><strong>Exercise:</strong><br />Work with your partner to do the following:</p>
+<ol style="list-style-type: decimal">
+<li>Calculcate the <code>mean()</code> of the genome_length for each of the citrate mutants.<br /></li>
+<li>Calculate the standard deviation with <code>sd()</code> of the genome_length for each of the citrate mutants.<br /></li>
+<li>Plot cit (x-axis) and the mean (y-axis) with errorbars.</li>
+</ol>
+</blockquote>
+</div>
 <div id="faceting-plots" class="section level2">
 <h2>Faceting plots</h2>
 <p>One of the best features of ggplot is to be able to facet plots. When you facet plots you split up your data by one or more variables and plot the subsets of data together.</p>
 <p>Two ways to facet:</p>
 <ol style="list-style-type: decimal">
 <li><code>facet_grid</code>: Input values for <code>vertical ~ horizontal</code>.<br /></li>
-<li><code>facet_wrap</code></li>
+<li><code>facet_wrap</code>: Instead of faceting with a variable in the horizontal or vertical direction, facets can be placed next to each other, wrapping with a certain number of columns or rows. The label for each plot will be at the top of the plot.</li>
 </ol>
 <blockquote>
-<p><strong>Tip:</strong> This is a great way to explore your data!</p>
+<p><strong>Tip:</strong> Facets are a great way to explore your data!</p>
 </blockquote>
 <pre class="r"><code># Break up 3 groups 
 ggplot(metadata, aes(x = sample, y= genome_size, color = generation, shape = cit)) +
@@ -1038,40 +1123,11 @@ ggplot(metadata, aes(x = sample, y= genome_size, color = generation, shape = cit
 <blockquote>
 <p><strong>Challenge</strong>:</p>
 <ol style="list-style-type: decimal">
-<li>Create a facetted plot of sample (x-axis) and genome size (y-axis) broken up by <strong>clade</strong>. Make the colors of the plot to represent each clade.<br /></li>
+<li>Create a faceted plot of sample (x-axis) and genome size (y-axis) broken up by <strong>clade</strong>. Make the colors of the plot to represent each clade.<br /></li>
+<li>Create another faceted plot with the clade (x-axis) and <strong>mean</strong> genome size on the (y- axis).<br /></li>
 <li>Create another facetted plot with sample (x-axis) and genome size (y-axis) broke up by <strong>generation</strong>. Color the points by the citrate mutant. What does this tell us about what “unknown” means?</li>
 </ol>
 </blockquote>
-</div>
-<div id="writing-figures-to-file" class="section level2">
-<h2>Writing figures to file</h2>
-<p>There are two ways in which figures and plots can be output to a file (rather than simply displaying on screen).</p>
-<ol style="list-style-type: decimal">
-<li><strong>Easier way:</strong> Export directly from the RStudio ‘Plots’ panel, by clicking on Export when the image is plotted. This will give you the option of <code>png</code> or <code>pdf</code> and selecting the directory to which you wish to save it to.<br /></li>
-<li><strong>More reproducible way:</strong> Use R functions that allow you the flexibility to specify parameters to dictate the size and resolution of the output image. Some of the more popular formats include <code>pdf()</code>, <code>png()</code>, <code>jpeg()</code>, <code>tiff()</code>etc.</li>
-</ol>
-<p>Initialize a plot that will be written directly to a file using <code>pdf()</code>, <code>png()</code>, <code>jpeg()</code>, <code>tiff()</code> etc.</p>
-<p>Within the function you will need to:</p>
-<ol style="list-style-type: decimal">
-<li>specify a name for your image.<br /></li>
-<li>Provide the width and height (optional).<br /></li>
-<li>Create a plot using the usual functions in R.<br /></li>
-<li>Close the file using the <code>dev.off()</code> function.</li>
-</ol>
-<p>Make a new folder called <code>figures</code> to store plots in.</p>
-<pre class="r"><code>pdf(&quot;figures/boxplot.pdf&quot;)
-
-ggplot(metadata, aes(x = cit, y = genome_size, fill = cit)) +
-  geom_boxplot() +
-  ggtitle(&quot;Boxplot of genome size by citrate mutant type&quot;) +
-  xlab(&quot;citrate mutant&quot;) +
-  ylab(&quot;genome size&quot;) + 
-  theme(panel.grid.major = element_line(size = .5, color = &quot;grey&quot;),
-          axis.text.x = element_text(angle=45, hjust=1),
-          axis.title = element_text(size = rel(1.5)),
-          axis.text = element_text(size = rel(1.25)))
-
-dev.off()</code></pre>
 <hr />
 </div>
 </div>

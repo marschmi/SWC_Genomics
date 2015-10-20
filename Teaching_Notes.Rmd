@@ -596,10 +596,12 @@ This addresses a common problem with R in that all operations are conducted in m
 We’re going to learn some of the most common dplyr functions:  
 
 - `select()`  
-- `filter()`  
+- `filter()` 
+- `arrange()`
 - `mutate()`  
 - `group_by()`  
-- `summarize()` 
+- `summarize()`
+
 
 To select columns of a data frame, use `select().` 
 
@@ -615,6 +617,41 @@ To choose rows, use `filter()`:
 filter(metadata, cit == "plus") # select only rows that are the citrate plus mutant
 ```
 
+> **Challenge:**
+> 
+> 1.  Filter out samples that have a genome size that is equal or greater than 4.74.
+> 2.  Filter out mutants that are "unknown" **and** are before generations 25,000.
+
+```{r solution filter, echo=FALSE, eval= FALSE}
+# 1.  Filter out samples that have a genome size that is equal or greater than 4.74  
+filter(metadata, genome_size >= 4.74)
+
+# 2.  Filter out mutants that are "unknown" and are before generations 25,000.
+filter(metadata, cit == "unknown", generation < 25000)
+```
+
+
+To re-order or arrange the output, use `arrange()`:
+
+```{r arrange dplyr, eval = FALSE, echo = TRUE}
+arrange(metadata, genome_size) # arrange by ascending genome_size
+arrange(metadata, -genome_size) # arrange by -ascending genome_size
+arrange(metadata, -generation) # arrange by descending generation
+```
+
+> **Challenge:**  
+>
+> Create a new object named `arranged_metadata` where `metadata` is arranged first by descending generation and second by ascending clade 
+
+```{r solution arrange dplyr, eval = FALSE, echo = FALSE}
+arranged_metadata <- arrange(metadata, -generation, clade)
+```
+
+Summary so far:  
+
+- `select()`:  To subset certain **columns** out of the data.  
+- `filter()`:  To subset specific **rows** out of the data.
+- `arrange()`: To sort the data frame by columns.   
 
 ### Pipes
 But what if you wanted to select and filter? 
@@ -650,7 +687,17 @@ meta_citplus
 ```
 
 > **Challenge**  
-> Using pipes, subset the data to include rows where the clade is ‘Cit+’. Retain columns `sample`, `cit`, and `genome_size`.
+> Using pipes, subset the data to include rows where the clade is ‘unknown+’. Retain columns `sample`, `cit`, and `genome_size`.  Finally arrange the output by descending genome_size.
+
+```{r solution pipes dplyr, eval = FALSE, echo = FALSE}
+meta_citplus_arranged <- metadata %>%
+  filter(cit == "unknown") %>%
+  select(sample, cit, genome_size) %>%
+  arrange(-genome_size)
+
+meta_citplus_arranged
+```
+
 
 ### Mutate  
 Frequently you’ll want to create new columns based on the values in existing columns, for example to do unit conversions or find the ratio of values in two columns. For this we’ll use `mutate()`.
@@ -669,7 +716,13 @@ metadata %>%
   head
 ```
 
-The row has a `NA` value for clade, so if we wanted to remove those we could insert a filter() in this chain:
+The row has a `NA` value for clade, so if we wanted to remove those we could insert a `filter()` in this chain:  
+
+We can do this by using the `is.na()` command.  
+
+`is.na()` is a function that determines whether something is or is not an `NA`. The `!` symbol negates it, so we’re asking for everything that is not an `NA`.
+
+Remember the `!=` inequality operations, we can use this with `is.na()` by placing it before the command like this `!is.na()`.  
 
 ```{r mutate & filter dplyr, eval=FALSE, echo=TRUE}
 metadata %>%
@@ -677,8 +730,6 @@ metadata %>%
   filter(!is.na(clade)) %>% # select all rows where clade is NOT an NA
   head
 ```
-
-`is.na()` is a function that determines whether something is or is not an `NA`. The `!` symbol negates it, so we’re asking for everything that is not an `NA`.
 
 
 ### Split-apply-combine data analysis and the `summarize()` function  
@@ -709,7 +760,7 @@ There are several different summary statistics that can be generated from our da
 - `mean()`  
 - `median()`  
 - `min()` & `max()`  
-- `range`
+- `range()`
 
 By default, all R functions operating on vectors that contains missing data will return `NA`. It’s a way to make sure that users know they have missing data, and make a conscious decision on how to deal with it. 
 
@@ -738,6 +789,27 @@ metadata %>%
   summarize(mean_size = mean(genome_size, na.rm = TRUE)) %>%
   filter(!is.na(clade))
 ```
+
+
+> **Challenge:**  
+> Let's calculate summary statistics!  All in one go, let's do the following:  
+>
+> 1. Group by `cit`  
+> 2. Calculate the `mean()` generation for each mutant.  
+> 3. Calculate the `median()` generation for each mutant.
+> 4. Calculate the `min()` generation for each mutant.  
+> 5. calculate the `max()` generation for each mutant.  
+
+
+```{r dplyr capstone, eval = FALSE, echo = FALSE}
+metadata %>%
+  group_by(cit) %>%
+  summarize(mean_gen = mean(generation, na.rm = TRUE), 
+            median_gen = median(generation, na.rm = TRUE), 
+            min_gen = min(generation, na.rm = TRUE), 
+            max_gen = max(generation, na.rm = TRUE)) 
+```
+
 
 What do we notice about the output??  
 
@@ -819,6 +891,8 @@ boxplot(genome_size ~ cit, metadata,  col=c("pink","purple", "darkgrey"),
 ## Advanced figures with `ggplot2`  
 More recently, R users have moved away from base graphic options and towards a plotting package called `ggplot2` that adds a lot of functionality to the basic plots seen above.  
 
+An amazing resource for `ggplot2` is the <a href="http://www.cookbook-r.com/Graphs/" target="_blank">R Cookbook written by Winston Chang</a>   
+
 The syntax takes some getting used to but it’s extremely powerful and flexible. We can start by re-creating some of the above plots but using `ggplot2` functions to get a feel for the syntax.
 
 ``ggplot()`` is best used on data in the `data.frame` form, so we will work with metadata for the following figures. Let’s start by loading the ggplot2 library.
@@ -856,6 +930,8 @@ Each type of `geom` usually has a required set of aesthetics to be set, and usua
 - fill (“inside” color) shape (of points)
 - linetype
 - size
+
+<a href="https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf">ggplot Cheat Sheet</a>   
 
 ```{r ggplots, echo=TRUE, eval = FALSE}
 ggplot(metadata, aes(x = sample, y= genome_size)) +
@@ -912,6 +988,33 @@ ggplot(metadata, aes(x = generation, y= genome_size, color = generation, shape =
 
 ```
 
+### Writing figures to file
+There are two ways in which figures and plots can be output to a file (rather than simply displaying on screen).   
+
+1.  **Easier way:** Export directly from the RStudio ‘Plots’ panel, by clicking on Export when the image is plotted. This will give you the option of `png` or `pdf` and selecting the directory to which you wish to save it to.  
+2.  **More reproducible way:** Use R functions that allow you the flexibility to specify parameters to dictate the size and resolution of the output image. Some of the more popular formats include `pdf()`, `png()`, `jpeg()`, `tiff()`etc.
+
+Initialize a plot that will be written directly to a file using `pdf()`, `png()`, `jpeg()`, `tiff()` etc.
+
+Within the function you will need to: 
+
+1. Specify a name for your image.  
+2. Provide the width and height (optional).  
+3. Create a plot using the usual functions in R.  
+4. Close the file using the `dev.off()` function.
+
+Make a new folder called `figures` to store plots in.
+
+```{r saving figures, eval=FALSE, echo=TRUE}
+pdf("figures/genome_size_vs_generation.pdf", width = 7, height = 5)
+
+ggplot(metadata, aes(x = generation, y= genome_size, color = generation, shape = cit)) +
+  geom_point(size = rel(3.0)) +
+  theme(axis.text.x = element_text(angle=45, hjust=1))
+
+dev.off()
+```
+
 ###Histogram
 To plot a histogram we require another geometric object `geom_bar()`, which requires a statistical transformation. Some plot types (such as scatterplots) do not require transformations, each point is plotted at x and y coordinates equal to the original value. Other plots, such as boxplots, histograms, prediction lines etc. need to be transformed, and usually has a default statistic that can be changed via the stat_bin argument.
 
@@ -947,6 +1050,11 @@ ggplot(metadata, aes(x = genome_size, fill = cit)) +
 ```
 
 
+> **Challenge:**
+>
+> Re-create the histogram plots from above.  This time, save each of the plots that you make in the `figures` folder.  
+
+
 ###Boxplot
 Let’s try plotting a boxplot similar to what we had done using the base plot functions at the start of this lesson. We can add some additional layers to include a plot title and change the axis labels. Explore the code below and all the different layers that we have added to understand what each layer contributes to the final graphic.
 
@@ -963,15 +1071,52 @@ ggplot(metadata, aes(x = cit, y = genome_size, fill = cit)) +
 ```
 
 
+## Error bars
+Box and whisker plots are nice, but maybe we would prefer to calculate the mean and standard deviation of the genome_size within each of the citrate mutants with error bars.  
+
+To plot scatter plots with error bars, we use `geom_errobar()`.  
+
+- `geom_errorbar(width = 0.1, aes(ymin = mean - sd, ymax = mean + sd))`  
+    + The `width` argument will make wider error bars.  
+
+
+This means that we will have to calculate both the mean and the standard deviaition.  
+
+> **Exercise:**  
+> Work with your partner to do the following:  
+> 
+> 1. Calculcate the `mean()` of the genome_length for each of the citrate mutants.  
+> 2. Calculate the standard deviation with `sd()` of the genome_length for each of the citrate mutants.  
+> 3. Plot cit (x-axis) and the mean (y-axis) with errorbars.  
+ 
+```{r solution ggplot mean errorbars, eval=FALSE, echo = FALSE}
+# Solution 
+#Create an object with dplyr
+mean_sd_metadata <- metadata %>%
+  group_by(cit) %>%
+  summarize(mean_size = mean(genome_size, na.rm = TRUE), 
+            sd_size = sd(genome_size, na.rm = TRUE))
+
+# Looking at the structure and data type of mean_sd_metadata
+class(mean_sd_metadata)
+glimpse(mean_sd_metadata)
+
+ggplot(mean_sd_metadata, aes(x = cit, y= mean_size, shape = cit, color = cit)) +
+  geom_point(size = rel(3.0)) +
+  geom_errorbar(width = 0.1, aes(ymax = mean_size + sd_size, ymin = mean_size - sd_size)) + 
+  theme(axis.text.x = element_text(angle=45, hjust=1))
+```
+
+
 ## Faceting plots 
 One of the best features of ggplot is to be able to facet plots.  When you facet plots you split up your data by one or more variables and plot the subsets of data together.  
 
 Two ways to facet:  
 
 1. `facet_grid`:  Input values for `vertical ~ horizontal`.  
-2. `facet_wrap`
+2. `facet_wrap`:  Instead of faceting with a variable in the horizontal or vertical direction, facets can be placed next to each other, wrapping with a certain number of columns or rows. The label for each plot will be at the top of the plot.  
 
-> **Tip:**  This is a great way to explore your data!
+> **Tip:**  Facets are a great way to explore your data!
 
 ```{r ggplot facet, eval=FALSE, echo = TRUE}
 # Break up 3 groups 
@@ -998,41 +1143,42 @@ ggplot(metadata, aes(x = sample, y= genome_size, color = generation, shape = cit
 
 > **Challenge**: 
 >
-> 1.  Create a facetted plot of sample (x-axis) and genome size (y-axis) broken up by **clade**.  Make the colors of the plot to represent each clade.  
-> 2.  Create another facetted plot with sample (x-axis) and genome size (y-axis) broke up by **generation**.  Color the points by the citrate mutant.  What does this tell us about what "unknown" means?  
+> 1.  Create a faceted plot of sample (x-axis) and genome size (y-axis) broken up by **clade**.  Make the colors of the plot to represent each clade.  
+> 2.  Create another faceted plot with the clade (x-axis) and **mean** genome size on the (y- axis).  
+> 3.  Create another facetted plot with sample (x-axis) and genome size (y-axis) broke up by **generation**.  Color the points by the citrate mutant.  What does this tell us about what "unknown" means?  
+
+```{r solution challenge, eval=FALSE, echo = FALSE}
+#1.  Create a faceted plot of sample (x-axis) and genome size (y-axis) broken up by **clade**.  Make the colors of the plot to represent each clade. 
+ggplot(metadata, aes(x = sample, y= genome_size, color = clade)) +
+  geom_point(size = rel(3.0)) +
+  theme(axis.text.x = element_text(angle=45, hjust=1)) + 
+  facet_grid(. ~ clade, scales = "free_x") 
 
 
-## Writing figures to file
-There are two ways in which figures and plots can be output to a file (rather than simply displaying on screen).   
 
-1.  **Easier way:** Export directly from the RStudio ‘Plots’ panel, by clicking on Export when the image is plotted. This will give you the option of `png` or `pdf` and selecting the directory to which you wish to save it to.  
-2.  **More reproducible way:** Use R functions that allow you the flexibility to specify parameters to dictate the size and resolution of the output image. Some of the more popular formats include `pdf()`, `png()`, `jpeg()`, `tiff()`etc.
+# 2.  Create a third faceted plot with the clade (x-axis) and mean genome size on the (y- axis) and 
+mean_clade_metadata <- metadata %>%
+  group_by(clade) %>%
+  summarize(mean_size = mean(genome_size, na.rm = TRUE), 
+            sd_size = sd(genome_size, na.rm = TRUE))
 
-Initialize a plot that will be written directly to a file using `pdf()`, `png()`, `jpeg()`, `tiff()` etc.
+ggplot(mean_clade_metadata, aes(x = clade, y= mean_size, color = clade)) +
+  geom_point(size = rel(3.0)) +
+  theme(axis.text.x = element_text(angle=45, hjust=1)) + 
+  facet_grid(. ~ clade, scales = "free_x") + 
+  geom_errorbar(width = 0.1, aes(ymax = mean_size + sd_size, ymin = mean_size - sd_size))
 
-Within the function you will need to: 
 
-1. specify a name for your image.  
-2. Provide the width and height (optional).  
-3. Create a plot using the usual functions in R.  
-4. Close the file using the `dev.off()` function.
 
-Make a new folder called `figures` to store plots in.
-
-```{r saving figures, eval=FALSE, echo=TRUE}
-pdf("figures/boxplot.pdf")
-
-ggplot(metadata, aes(x = cit, y = genome_size, fill = cit)) +
-  geom_boxplot() +
-  ggtitle("Boxplot of genome size by citrate mutant type") +
-  xlab("citrate mutant") +
-  ylab("genome size") + 
-  theme(panel.grid.major = element_line(size = .5, color = "grey"),
-          axis.text.x = element_text(angle=45, hjust=1),
-          axis.title = element_text(size = rel(1.5)),
-          axis.text = element_text(size = rel(1.25)))
-
-dev.off()
-
+# 3.  Create another facetted plot with sample (x-axis) and genome size (y-axis) broke up by **generation**.  Color the points by the citrate mutant.  What does this tell us about what "unknown" means? 
+ggplot(metadata, aes(x = sample, y= genome_size, color = cit)) +
+  geom_point(size = rel(3.0)) +
+  theme(axis.text.x = element_text(angle=45, hjust=1)) + 
+  facet_grid(. ~ generation, scales = "free_x") 
 ```
+
+
 ***
+
+
+
