@@ -891,6 +891,25 @@ ggplot(metadata, aes(x = sample, y= genome_size, shape = cit)) +
 ggplot(metadata, aes(x = sample, y= genome_size, color = generation, shape = cit)) +
   geom_point(size = rel(3.0)) +
   theme(axis.text.x = element_text(angle=45, hjust=1))
+
+##  Let's look at genome_size by generation
+ggplot(metadata, aes(x = generation, y= genome_size, color = generation, shape = cit)) +
+  geom_point(size = rel(3.0)) +
+  theme(axis.text.x = element_text(angle=45, hjust=1))
+
+# Zoom in on a certain part of the plot with setting the xlim
+summary(metadata$generation) # let's plot the mean to max 
+ggplot(metadata, aes(x = generation, y= genome_size, color = generation, shape = cit)) +
+  geom_point(size = rel(3.0)) +
+  theme(axis.text.x = element_text(angle=45, hjust=1)) + 
+  xlim(mean(metadata$generation), max(metadata$generation))
+
+##  Flip the plot with coord_flip!
+ggplot(metadata, aes(x = generation, y= genome_size, color = generation, shape = cit)) +
+  geom_point(size = rel(3.0)) + 
+  theme(axis.text.x = element_text(angle=45, hjust=1)) + 
+  coord_flip()
+
 ```
 
 ###Histogram
@@ -944,13 +963,59 @@ ggplot(metadata, aes(x = cit, y = genome_size, fill = cit)) +
 ```
 
 
+## Faceting plots 
+One of the best features of ggplot is to be able to facet plots.  When you facet plots you split up your data by one or more variables and plot the subsets of data together.  
+
+Two ways to facet:  
+
+1. `facet_grid`:  Input values for `vertical ~ horizontal`.  
+2. `facet_wrap`
+
+> **Tip:**  This is a great way to explore your data!
+
+```{r ggplot facet, eval=FALSE, echo = TRUE}
+# Break up 3 groups 
+ggplot(metadata, aes(x = sample, y= genome_size, color = generation, shape = cit)) +
+  geom_point(size = rel(3.0)) +
+  theme(axis.text.x = element_text(angle=45, hjust=1)) + 
+  facet_grid(cit ~ .) # To make 3 plots in one! Remember, vertical ~ horizontal. 
+
+# This plot would be more useful.
+# Break up 3 groups on the x-axis by citrate mutant status along the x-axis.
+ggplot(metadata, aes(x = sample, y= genome_size, color = generation, shape = cit)) +
+  geom_point(size = rel(3.0)) +
+  theme(axis.text.x = element_text(angle=45, hjust=1)) + 
+  facet_grid(. ~ cit) # To make 3 plots in one!  Remember, vertical ~ horizontal. 
+
+
+# Let's make the plot a little prettier
+ggplot(metadata, aes(x = sample, y= genome_size, color = generation, shape = cit)) +
+  geom_point(size = rel(3.0)) +
+  theme(axis.text.x = element_text(angle=45, hjust=1)) + 
+  facet_grid(. ~ cit, scales = "free_x") # Delete all the extra samples 
+```
+
+
+> **Challenge**: 
+>
+> 1.  Create a facetted plot of sample (x-axis) and genome size (y-axis) broken up by **clade**.  Make the colors of the plot to represent each clade.  
+> 2.  Create another facetted plot with sample (x-axis) and genome size (y-axis) broke up by **generation**.  Color the points by the citrate mutant.  What does this tell us about what "unknown" means?  
+
+
 ## Writing figures to file
 There are two ways in which figures and plots can be output to a file (rather than simply displaying on screen).   
 
 1.  **Easier way:** Export directly from the RStudio ‘Plots’ panel, by clicking on Export when the image is plotted. This will give you the option of `png` or `pdf` and selecting the directory to which you wish to save it to.  
-2.  Use R functions that allow you the flexibility to specify parameters to dictate the size and resolution of the output image. Some of the more popular formats include `pdf()`, `png()`.
+2.  **More reproducible way:** Use R functions that allow you the flexibility to specify parameters to dictate the size and resolution of the output image. Some of the more popular formats include `pdf()`, `png()`, `jpeg()`, `tiff()`etc.
 
-Initialize a plot that will be written directly to a file using pdf, png etc. Within the function you will need to specify a name for your image, and the with and height (optional). Then create a plot using the usual functions in R. Finally, close the file using the dev.off() function. There are also bmp, tiff, and jpeg functions, though the jpeg function has proven less stable than the others.
+Initialize a plot that will be written directly to a file using `pdf()`, `png()`, `jpeg()`, `tiff()` etc.
+
+Within the function you will need to: 
+
+1. specify a name for your image.  
+2. Provide the width and height (optional).  
+3. Create a plot using the usual functions in R.  
+4. Close the file using the `dev.off()` function.
 
 Make a new folder called `figures` to store plots in.
 
