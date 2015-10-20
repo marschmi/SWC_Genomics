@@ -122,7 +122,10 @@ img {
 <li><a href="#histogram">Histogram</a></li>
 <li><a href="#boxplot">Boxplot</a></li>
 </ul></li>
-<li><a href="#advanced-figures-with-ggplot2">Advanced figures with <code>ggplot2</code></a></li>
+<li><a href="#advanced-figures-with-ggplot2">Advanced figures with <code>ggplot2</code></a><ul>
+<li><a href="#histogram-1">Histogram</a></li>
+<li><a href="#boxplot-1">Boxplot</a></li>
+</ul></li>
 </ul></li>
 </ul>
 </div>
@@ -901,7 +904,7 @@ library(ggplot2)</code></pre>
 <p>A plot must have at least one <code>geom</code> (short for geometric objects); there is no upper limit. You can add a geom to a plot using the + operator</p>
 <pre class="r"><code>ggplot(metadata) +
   geom_point() # note what happens here</code></pre>
-<p>Each type of geom usually has a required set of aesthetics to be set, and usually accepts only a subset of all aesthetics –refer to the geom help pages to see what mappings each geom accepts. Aesthetic mappings are set with the <code>aes()</code> function. Examples include:</p>
+<p>Each type of <code>geom</code> usually has a required set of aesthetics to be set, and usually accepts only a subset of all aesthetics –refer to the geom help pages to see what mappings each geom accepts. Aesthetic mappings are set with the <code>aes()</code> function. Examples include:</p>
 <ul>
 <li>position (i.e., on the x and y axes)</li>
 <li>color (“outside” color)</li>
@@ -909,12 +912,79 @@ library(ggplot2)</code></pre>
 <li>linetype</li>
 <li>size</li>
 </ul>
-<pre class="r"><code>ggplot(metadata) +
-  geom_point(aes(x = sample, y= genome_size))
+<pre class="r"><code>ggplot(metadata, aes(x = sample, y= genome_size)) +
+  geom_point()
+# above is the same as below
+ggplot(metadata) +
++ geom_point(aes(x = sample, y= genome_size))</code></pre>
+<p>The labels on the x-axis are quite hard to read. To do this we need to add an additional theme layer. The ggplot2 theme system handles non-data plot elements such as:</p>
+<ul>
+<li>Axis labels</li>
+<li>Plot background</li>
+<li>Facet label backround</li>
+<li>Legend appearance</li>
+</ul>
+<p>There are built-in themes we can use, or we can adjust specific elements.</p>
+<p>For our figure we will change:</p>
+<ul>
+<li>The x-axis labels to be plotted on a 45 degree angle with a small horizontal shift to avoid overlap.<br /></li>
+<li>Add some additional aesthetics by mapping them to other variables in our dataframe.
+<ul>
+<li>For example, the color of the points will reflect the number of generations and the shape will reflect citrate mutant status.<br /></li>
+</ul></li>
+<li>The size of the points can be adjusted within the geom_point but does not need to be included in <code>aes()</code> since the value is not mapping to a variable.</li>
+</ul>
+<pre class="r"><code># First let's change the shape of the symbols 
+ggplot(metadata, aes(x = sample, y= genome_size, shape = cit)) +
+  geom_point(size = rel(3.0)) +
+  theme(axis.text.x = element_text(angle=45, hjust=1)) # put x-axis on 45 degree angle
 
-ggplot(metadata, aes(x = sample, y= genome_size)) +
-  geom_point()</code></pre>
+# Then add the change in color due to generations 
+ggplot(metadata, aes(x = sample, y= genome_size, color = generation, shape = cit)) +
+  geom_point(size = rel(3.0)) +
+  theme(axis.text.x = element_text(angle=45, hjust=1))</code></pre>
+<div id="histogram-1" class="section level3">
+<h3>Histogram</h3>
+<p>To plot a histogram we require another geometric object <code>geom_bar()</code>, which requires a statistical transformation. Some plot types (such as scatterplots) do not require transformations, each point is plotted at x and y coordinates equal to the original value. Other plots, such as boxplots, histograms, prediction lines etc. need to be transformed, and usually has a default statistic that can be changed via the stat_bin argument.</p>
+<pre class="r"><code>ggplot(metadata, aes(x = genome_size)) +
+  geom_bar() + xlab(&quot;Genome Size&quot;) + ylab(&quot;Count&quot;)</code></pre>
+<p>Try plotting with the default value and compare it to the plot using the binwidth values. How do they differ?</p>
+<pre class="r"><code>ggplot(metadata, aes(x = genome_size)) +
+  geom_bar(stat = &quot;bin&quot;, binwidth=0.01)
+
+# Add black and white background
+ggplot(metadata, aes(x = genome_size)) +
+  geom_bar(stat = &quot;bin&quot;, binwidth=0.01) + theme_bw() 
+
+# make a pretty color
+ggplot(metadata, aes(x = genome_size)) + 
+  geom_bar(stat = &quot;bin&quot;, fill = &quot;cornflowerblue&quot;, color = &quot;black&quot;, binwidth=0.01) + theme_bw()
+
+# color by citrate mutant
+ggplot(metadata, aes(x = genome_size, fill = cit)) + 
+  geom_bar(stat = &quot;bin&quot;, color = &quot;black&quot;, binwidth=0.01) + 
+  theme_bw()
+
+# Move the legend within
+ggplot(metadata, aes(x = genome_size, fill = cit)) + 
+  geom_bar(stat = &quot;bin&quot;, color = &quot;black&quot;, binwidth=0.01) + 
+  theme_bw() + 
+  theme(legend.position = c(0.8, 0.8)) # (x,y) Think of each side of the plot to be 1 </code></pre>
+</div>
+<div id="boxplot-1" class="section level3">
+<h3>Boxplot</h3>
+<p>Let’s try plotting a boxplot similar to what we had done using the base plot functions at the start of this lesson. We can add some additional layers to include a plot title and change the axis labels. Explore the code below and all the different layers that we have added to understand what each layer contributes to the final graphic.</p>
+<pre class="r"><code>ggplot(metadata, aes(x = cit, y = genome_size, fill = cit)) +
+  geom_boxplot() +
+  ggtitle(&quot;Boxplot of genome size by citrate mutant type&quot;) +
+  xlab(&quot;citrate mutant&quot;) +
+  ylab(&quot;genome size&quot;) + 
+  theme(panel.grid.major = element_line(size = .5, color = &quot;grey&quot;),
+          axis.text.x = element_text(angle=45, hjust=1),
+          axis.title = element_text(size = rel(1.5)),
+          axis.text = element_text(size = rel(1.25)))</code></pre>
 <hr />
+</div>
 </div>
 </div>
 
