@@ -774,7 +774,7 @@ genome_size <- metadata$genome_size
 ```
 
 
-## Scatterplot
+### Scatterplot
 Let’s start with a scatterplot. A scatter plot provides a graphical view of the relationship between two sets of numbers. 
 
 We don’t have a variable in our metadata that is a continous variable, so there is nothing to plot it against but we can plot the values against their **index** values just to demonstrate the function.
@@ -793,7 +793,7 @@ plot(genome_size, pch=8, main="Scatter plot of genome sizes") # Add a title
 ```
 
 
-## Histogram  
+### Histogram  
 Another way to visualize the distribution of genome sizes is to use a histogram, we can do this buy using the `hist()` function:
 
 ```{r base histogram, echo=TRUE, eval = FALSE}
@@ -802,14 +802,68 @@ hist(genome_size)  # Create histogram of genome sizes
 hist(genome_size, breaks = 10)
 ```
 
-## Boxplot
+### Boxplot
 Using additional information from our metadata, we can use plots to compare values between the different citrate mutant status using a boxplot. A boxplot provides a graphical view of the median, quartiles, maximum, and minimum of a data set.
 
+```{r base boxplot, echo=TRUE, eval = FALSE}
 # Boxplot
-boxplot(genome_size ~ cit, metadata)
+boxplot(metadata$genome_size ~ metadata$cit) # Creates a box and whisker plot
+```
 
+To the **left** of the `~` is the *response variable* and to the **right** of the tilde is the *explanatory variable.*
+```{r base colored boxplot, echo=TRUE, eval = FALSE}
+boxplot(genome_size ~ cit, metadata,  col=c("pink","purple", "darkgrey"),
+        main="Average expression differences between celltypes", ylab="Expression")
+```
 
+## Advanced figures with `ggplot2`  
+More recently, R users have moved away from base graphic options and towards a plotting package called `ggplot2` that adds a lot of functionality to the basic plots seen above.  
 
+The syntax takes some getting used to but it’s extremely powerful and flexible. We can start by re-creating some of the above plots but using `ggplot2` functions to get a feel for the syntax.
 
+``ggplot()`` is best used on data in the `data.frame` form, so we will work with metadata for the following figures. Let’s start by loading the ggplot2 library.
+
+```{r install and load ggplot, echo=TRUE, eval = FALSE}
+install.packages("ggplot2")
+library(ggplot2)
+```
+
+The `ggplot()` function is used to initialize the basic graph structure, then we add to it. The basic idea is that you specify different parts of the plot, and add them together using the + operator.
+
+We will start with a blank plot and will find that you will get an error, because you need to add layers.
+
+```{r ggplot error, echo=TRUE, eval = FALSE}
+ggplot(metadata) # note the error 
+```
+
+Geometric objects are the actual marks we put on a plot. Examples include:
+
+- points (geom_point, for scatter plots, dot plots, etc)
+- lines (geom_line, for time series, trend lines, etc)
+- boxplot (geom_boxplot, for, well, boxplots!)
+
+A plot must have at least one `geom` (short for geometric objects); there is no upper limit. You can add a geom to a plot using the + operator
+
+```{r ggplot error2, echo=TRUE, eval = FALSE}
+ggplot(metadata) +
+  geom_point() # note what happens here
+```
+
+Each type of geom usually has a required set of aesthetics to be set, and usually accepts only a subset of all aesthetics –refer to the geom help pages to see what mappings each geom accepts. Aesthetic mappings are set with the `aes()` function. Examples include:
+
+- position (i.e., on the x and y axes)
+- color (“outside” color)
+- fill (“inside” color) shape (of points)
+- linetype
+- size
+
+```{r ggplots, echo=TRUE, eval = FALSE}
+ggplot(metadata) +
+  geom_point(aes(x = sample, y= genome_size))
+
+ggplot(metadata, aes(x = sample, y= genome_size)) +
+  geom_point()
+
+```
 
 ***
